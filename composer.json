@@ -34,6 +34,9 @@
         "jms/di-extra-bundle": "1.3.*",
         "mockery/mockery":"dev-master#1a1a222"
     },
+     "autoload": {
+        "psr-0": { "ADR\\Bundle\\Symfony2ErlangBundle": "" }
+    },
     "minimum-stability": "dev",
     "target-dir": "ADR/Bundle/Symfony2ErlangBundle"
 }
