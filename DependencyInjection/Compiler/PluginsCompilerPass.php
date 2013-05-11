@@ -40,6 +40,11 @@ class PluginsCompilerPass implements CompilerPassInterface
 
         $definition = new Definition('ADR\Bundle\Symfony2ErlangBundle\Service\ChannelManager');
 
+        if (!isset($config['channels'])) {
+            throw new \Exception("Configure adr_symfony2_erlang channel on config.yml", 1);
+
+        }
+
         foreach ($config['channels'] as $name => $parameters) {
 
             $pluginId = $this->getPlugin($parameters['type']);
