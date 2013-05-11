@@ -18,7 +18,7 @@
     </testsuites>
 
     <php>
-        <server name="KERNEL_DIR" value="/Functional/" />
+        <server name="KERNEL_DIR" value="Tests/Functional/" />
     </php>
 
     <filter>

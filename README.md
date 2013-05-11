@@ -21,6 +21,40 @@ Quick start
 
     composer update
 
+Channel Definition Parameters:
+------------------------------
+    peb_node0:
+        type:   peb
+        config:
+            node: 'node0@machine'
+            cookie: 'abc'
+            timeout: 2
+    peb_node1:
+        type:   peb
+        config:
+            node: 'node0@127.0.0.1'
+            cookie: 'fh38ga00SIUG'
+            timeout: 2
+    rest_node0:
+        type:   rest
+        config:
+            host: 'http://localhost'
+            port: 80
+    rpc_amqp_node0:
+        type:   rpc_amqp
+        configs:
+            host: 'localhost'
+            port: 5672
+            user: 'guest'
+            password: 'guest'
+    socket_node0:
+        type:   socket
+        configs:
+            host: 'localhost'
+            port: 8080
+
+Start test:
+-----------
     # PEB
     erl -sname node0 -setcookie abc
     ets:new(test, [set, named_table, public]).
@@ -31,8 +65,7 @@ Quick start
     cd Erlang/RPC_AMQP
     ./rpc_server.erl
 
-Start test:
-
     # test
     phpunit
+
 
