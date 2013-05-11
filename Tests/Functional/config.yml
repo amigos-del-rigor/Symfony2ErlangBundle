@@ -1,0 +1,48 @@
+framework:
+    secret:          %secret%
+    router:
+        resource: "%kernel.root_dir%/routing.yml"
+        strict_requirements: %kernel.debug%
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    # templating:
+        # engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_proxies: ~
+    session:         ~
+    fragments:       ~
+
+adr_symfony2_erlang:
+    environment: %adr_symfony2_erlang.environment%
+    channels:
+        peb_node0:
+            type:   peb
+            config:
+                node: 'node0@machine'
+                cookie: 'abc'
+                timeout: 2
+        peb_node1:
+            type:   peb
+            config:
+                node: 'node0@127.0.0.1'
+                cookie: 'fh38ga00SIUG'
+                timeout: 2
+        rest_node0:
+            type:   rest
+            config:
+                host: 'http://localhost'
+                port: 80
+        rpc_amqp_node0:
+            type:   rpc_amqp
+            configs:
+                host: 'localhost'
+                port: 5672
+                user: 'guest'
+                password: 'guest'
+        socket_node0:
+            type:   socket
+            configs:
+                host: 'localhost'
+                port: 8080

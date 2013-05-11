@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!-- Encoders -->
+        <service id="adr_symfony2_erlang.channel.peb.encoder" class="ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebEncoder" />
+        <service id="adr_symfony2_erlang.channel.json.encoder" class="ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\JsonEncoder" />
+
+        <!-- Channels -->
+        <service id="adr_symfony2_erlang.channel.peb" class="ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\Peb">
+            <argument type="service" id="adr_symfony2_erlang.channel.peb.encoder" />
+            <tag name="erlang.channel" channel="peb"/>
+            <call method="setEnvironment">
+                <argument>%adr_symfony2_erlang.environment%</argument>
+            </call>
+        </service>
+
+        <service id="adr_symfony2_erlang.channel.rest" class="ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\Rest">
+            <argument type="service" id="adr_symfony2_erlang.channel.json.encoder" />
+            <tag name="erlang.channel" channel="rest"/>
+        </service>
+
+        <service id="adr_symfony2_erlang.channel.rpc_amqp" class="ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\RpcAmqp">
+            <argument type="service" id="adr_symfony2_erlang.channel.json.encoder" />
+            <tag name="erlang.channel" channel="rpc_amqp"/>
+        </service>
+
+        <service id="adr_symfony2_erlang.channel.socket" class="ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\Socket">
+            <argument type="service" id="adr_symfony2_erlang.channel.json.encoder" />
+            <tag name="erlang.channel" channel="socket"/>
+        </service>
+
+        <!-- Rest Controller definition -->
+        <service id="adr_symfony2_erlang.api.rest.controller" class="ADR\Bundle\Symfony2ErlangBundle\Controller\RestController" scope="request" >
+            <argument type="service" id="request" />
+            <argument type="service" id="adr_symfony2_erlang.channel.json.encoder" />
+        </service>
+
+    </services>
+</container>

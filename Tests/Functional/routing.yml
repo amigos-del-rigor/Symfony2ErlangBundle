@@ -1,0 +1,3 @@
+adr_symfony2_erlang.api.rest.controller:
+    resource: "@ADRSymfony2ErlangBundle/Resources/config/routing.yml"
+    prefix:   /api/

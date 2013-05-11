@@ -1,0 +1,68 @@
+parameters:
+    # abstraction layer class
+    adr_symfony2erlang.al.class: ADR\Bundle\Symfony2ErlangBundle\Lib\AbstractionLayer
+    # plugins classes
+    adr_symfony2erlang.plugin.peb.class: ADR\Bundle\Symfony2ErlangBundle\Lib\Plugins\PEB
+    adr_symfony2erlang.plugin.rest.class: ADR\Bundle\Symfony2ErlangBundle\Lib\Plugins\REST
+    adr_symfony2erlang.plugin.rpc_amqp.class: ADR\Bundle\Symfony2ErlangBundle\Lib\Plugins\RPCAMQP
+    adr_symfony2erlang.plugin.socket.class: ADR\Bundle\Symfony2ErlangBundle\Lib\Plugins\Socket
+    # channels
+    adr_symfony2erlang.plugin.peb.channels: ~
+    adr_symfony2erlang.plugin.rest.channels: ~
+    adr_symfony2erlang.plugin.rpc_amqp.channels: ~
+    adr_symfony2erlang.plugin.socket.channels: ~
+
+#    Examples:
+#    adr_symfony2erlang.plugin.peb.channels:
+#        peb_node0:
+#            node: 'node0@127.0.0.1'
+#            cookie: 'fh38ga00SIUG'
+#            timeout: 2
+#        peb_node1:
+#            node: 'node1@127.0.0.1'
+#            cookie: 'VNMWIsf73c'
+#            timeout: 2
+#    adr_symfony2erlang.plugin.rest.channels:
+#        rest_node0:
+#            host: 'localhost'
+#    adr_symfony2erlang.plugin.rpc_amqp.channels:
+#        rpc_amqp_node0:
+#            host: 'localhost'
+#            port: 5672
+#            user: 'guest'
+#            password: 'guest'
+#    adr_symfony2erlang.plugin.socket.channels:
+#        socket_node0:
+#            host: 'localhost'
+#            port: 8080
+
+services:
+    # abstraction layer
+    adr_symfony2erlang.al:
+        class: %adr_symfony2erlang.al.class%
+
+    # plugins
+    adr_symfony2erlang.plugin.peb:
+        class: %adr_symfony2erlang.plugin.peb.class%
+        arguments: [%adr_symfony2erlang.plugin.peb.channels%]
+        tags:
+        -  { name: adr_symfony2erlang.plugin }
+
+    adr_symfony2erlang.plugin.rest:
+        class: %adr_symfony2erlang.plugin.rest.class%
+        arguments: [%adr_symfony2erlang.plugin.rest.channels%]
+        tags:
+        -  { name: adr_symfony2erlang.plugin }
+
+    adr_symfony2erlang.plugin.rpc_amqp:
+        class: %adr_symfony2erlang.plugin.rpc_amqp.class%
+        arguments: [%adr_symfony2erlang.plugin.rpc_amqp.channels%]
+        tags:
+        -  { name: adr_symfony2erlang.plugin }
+
+    adr_symfony2erlang.plugin.socket:
+        class: %adr_symfony2erlang.plugin.socket.class%
+        arguments: [%adr_symfony2erlang.plugin.socket.channels%]
+        tags:
+        -  { name: adr_symfony2erlang.plugin }
+

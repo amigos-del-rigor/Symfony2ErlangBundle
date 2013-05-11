@@ -1,0 +1,3 @@
+adr_api_rest_controller_get:
+    pattern:  /{apiVersion}/{type}/{name}/{key}
+    defaults: { _controller:adr_symfony2_erlang.api.rest.controller:indexAction , apiVersion:v1, type:default, name:default, key:1}
