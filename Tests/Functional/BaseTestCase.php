@@ -1,15 +1,16 @@
 <?php
 namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Functional;
 
-use ADR\Bundle\Symfony2ErlangBundle\Tests\Functional\AppKernel;
+require_once(__DIR__ . "/../../../../../../../../app/AppKernel.php");
+// use ADR\Bundle\Symfony2ErlangBundle\Tests\Functional\AppKernel;
 
-class BaseTestCase extends \PHPUnit_Framework_TestCase
+abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
   protected $_container;
 
   public function __construct()
   {
-    $kernel = new AppKernel("test", true);
+    $kernel = new \AppKernel("test", true);
     $kernel->boot();
     $this->_container = $kernel->getContainer();
     parent::__construct();
