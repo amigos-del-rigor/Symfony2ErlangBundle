@@ -4,7 +4,7 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Functional;
 
 use ADR\Bundle\Symfony2ErlangBundle\Tests\Functional\BaseTestCase;
 
-class RestControllerTest extends BaseTestCase
+class RestApiTest extends BaseTestCase
 {
     public function testFunctionalCOntainerServicesAreUp()
     {
@@ -21,33 +21,73 @@ class RestControllerTest extends BaseTestCase
         $crawler = $client->request('GET', '/api/v3/test/var/123');
         $response = json_decode($client->getResponse()->getContent(), true);
 
+        $this->assertResponses($response, 'GET');
+    }
+
+    public function testPostCallToRestAPI()
+    {
+        $client = $this->createClient();
+        $client->request(
+            'POST',
+            '/api/v3/test/var/123',
+            $this->getFakeRequestData('post')
+        );
+
+        $response = json_decode($client->getResponse()->getContent(), true);
+        $this->assertResponses($response, 'POST');
+    }
+
+    public function testPutCallToRestAPI()
+    {
+        $client = $this->createClient();
+        $client->request(
+            'PUT',
+            '/api/v3/test/var/123',
+            $this->getFakeRequestData('put')
+        );
+
+        $response = json_decode($client->getResponse()->getContent(), true);
+        $this->assertResponses($response, 'PUT');
+
+    }
+
+    public function testDeleteCallToRestAPI()
+    {
+        $client = $this->createClient();
+        $crawler = $client->request('DELETE', '/api/v3/test/var/123');
+        $response = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertResponses($response, 'DELETE');
+
+    }
+
+    protected function assertResponses($response, $method)
+    {
         $this->assertInternalType('array', $response);
         $this->assertArrayHasKey("method", $response);
         $this->assertArrayHasKey("version", $response);
         $this->assertArrayHasKey("type", $response);
         $this->assertArrayHasKey("name", $response);
         $this->assertArrayHasKey("key", $response);
+        $this->assertArrayHasKey("test_data", $response);
         $this->assertEquals($response['version'], 'v3');
-        $this->assertEquals($response['method'], 'GET');
+        $this->assertEquals($response['method'], $method);
         $this->assertEquals($response['type'], 'test');
         $this->assertEquals($response['name'], 'var');
         $this->assertEquals($response['key'], 123);
+        $this->assertEquals($response['test_data'],  strtolower($method).'-ok');
     }
 
-    public function testPostCallToRestAPI()
+    protected function getFakeRequestData($method)
     {
-        $this->assertTrue(true);
-    }
-
-    public function testPutCallToRestAPI()
-    {
-        $this->assertTrue(true);
-
-    }
-
-    public function testDeleteCallToRestAPI()
-    {
-        $this->assertTrue(true);
-
+        return array(
+                'method'    =>  $method,
+                'version'   =>  'v1',
+                'type'      =>  'defaultType',
+                'name'      =>  'defaultName',
+                'key'       =>  1,
+                'status_code' => 200,
+                'test_data'  =>  $method.'-ok'
+            );
     }
 }

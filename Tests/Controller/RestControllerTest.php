@@ -54,11 +54,13 @@ class RestControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("type", $decodeResponse);
         $this->assertArrayHasKey("name", $decodeResponse);
         $this->assertArrayHasKey("key", $decodeResponse);
+        $this->assertArrayHasKey("test_data", $decodeResponse);
         $this->assertEquals($decodeResponse['version'], 'v1');
         $this->assertEquals($decodeResponse['method'], 'GET');
         $this->assertEquals($decodeResponse['type'], 'defaultType');
         $this->assertEquals($decodeResponse['name'], 'defaultName');
         $this->assertEquals($decodeResponse['key'], 1);
+        $this->assertEquals($decodeResponse['test_data'], 'fakeOK');
 
     }
 
@@ -98,7 +100,7 @@ class RestControllerTest extends \PHPUnit_Framework_TestCase
                 'name'      =>  'defaultName',
                 'key'       =>  1,
                 'status_code' => 200,
-                'testData'  =>  'fakeOK'
+                'test_data'  =>  'fakeOK'
             );
     }
 

@@ -6,7 +6,7 @@ use ADR\Bundle\Symfony2ErlangBundle\Service\Rest\RestHandlerInterface;
 
 abstract class AbstractHandler
 {
-    protected $request;
+    protected $request = array();
 
     public function handle(array $request)
     {
@@ -20,5 +20,15 @@ abstract class AbstractHandler
     protected function getMethod()
     {
         return strtolower($this->request['method']);
+    }
+
+    /**
+     * Used only in test environment
+     *
+     * @param array $request
+     */
+    public function setRequest(array $request)
+    {
+        $this->request = $request;
     }
 }

@@ -42,8 +42,8 @@ class RestController
         $statusCode = $response['status_code'];
         unset($response['status_code']);
 
-        if (isset($response['testData']) && PHP_SAPI === 'cli') {
-            unset($response['testData']);
+        if (isset($response['test_data']) && PHP_SAPI !== 'cli') {
+            unset($response['test_data']);
         }
 
         return new Response(
