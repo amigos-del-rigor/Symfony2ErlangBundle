@@ -21,7 +21,8 @@
     },
     "require-dev":{
         "symfony/symfony": "2.2.*",
-        "mockery/mockery":"dev-master#1a1a222"
+        "mockery/mockery":"dev-master#1a1a222",
+        "guzzle/guzzle": "3.4.*@dev"
     },
      "autoload": {
         "psr-0": { "ADR\\Bundle\\Symfony2ErlangBundle": "" }

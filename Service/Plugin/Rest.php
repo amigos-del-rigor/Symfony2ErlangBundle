@@ -30,16 +30,18 @@ class Rest implements ChannelInterface
      * @param  [type] $params   [description]
      * @return [type]           [description]
      */
-    public function call($resource, $data, $params = null) {
+    public function call($resource, $data = array(), $params = null)
+    {
+        $url = $resource['version'].'/'.
+            $resource['type'].'/'.
+            $resource['name'].'/'.
+            $resource['key'];
 
         $client = new Client($this->host);
-        $request = $client->post('/api', null, array(
-            'data' => $this->encoder->encode($data)
-        ));
-        $response = $request->send();
 
-        // echo $response->getBody();
-        // echo $response->getHeader('Content-Length');
+        //@TODO: need to deal with rest of METHODS!!
+        $request = $client->post($url, null, $data);
+        $response = $request->send();
 
         return $this->encoder->decode($response->getBody());
     }
