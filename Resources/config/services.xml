@@ -38,7 +38,11 @@
         <service id="adr_symfony2_erlang.api.rest.controller" class="ADR\Bundle\Symfony2ErlangBundle\Controller\RestController" scope="request" >
             <argument type="service" id="request" />
             <argument type="service" id="adr_symfony2_erlang.channel.json.encoder" />
+            <argument type="service" id="adr_symfony2_erlang.api.rest.handler.noop" />
         </service>
+
+        <!-- RestHandler -->
+        <service id="adr_symfony2_erlang.api.rest.handler.noop" class="ADR\Bundle\Symfony2ErlangBundle\Service\Rest\NoopRestHandler" />
 
     </services>
 </container>

@@ -12,18 +12,18 @@ class RestControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateResponse()
     {
-        $data = array('test'=>'okis');
-        $encodedData = json_encode($data);
+        $encodedData = json_encode($this->getFakeRequestData());
         $this->controller = new RestController(
             $this->getFakeRequest('GET'),
-            $this->getFakeJsonEncoder($encodedData)
+            $this->getFakeJsonEncoder($encodedData),
+            $this->getFakeRestHandler()
         );
 
         $r = new \ReflectionObject($this->controller);
         $m = $r->getMethod('createResponse');
         $m->setAccessible(true);
 
-        $response = $m->invoke($this->controller, $data, 200);
+        $response = $m->invoke($this->controller, $this->getFakeRequestData());
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
 
         $content = $response->getContent();
@@ -39,7 +39,8 @@ class RestControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->controller = new RestController(
             $this->getFakeRequest('GET'),
-            new JsonEncoder()
+            new JsonEncoder(),
+            $this->getFakeRestHandler()
         );
 
         $response = $this->controller->indexAction();
@@ -55,8 +56,8 @@ class RestControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey("key", $decodeResponse);
         $this->assertEquals($decodeResponse['version'], 'v1');
         $this->assertEquals($decodeResponse['method'], 'GET');
-        $this->assertEquals($decodeResponse['type'], 'default');
-        $this->assertEquals($decodeResponse['name'], 'default');
+        $this->assertEquals($decodeResponse['type'], 'defaultType');
+        $this->assertEquals($decodeResponse['name'], 'defaultName');
         $this->assertEquals($decodeResponse['key'], 1);
 
     }
@@ -78,4 +79,27 @@ class RestControllerTest extends \PHPUnit_Framework_TestCase
 
         return $mock;
     }
+
+    public function getFakeRestHandler()
+    {
+        $mock = \Mockery::mock('ADR\Bundle\Symfony2ErlangBundle\Service\Rest\RestHandlerInterface');
+        $mock->shouldReceive('handle')
+            ->andReturn($this->getFakeRequestData());
+
+        return $mock;
+    }
+
+    protected function getFakeRequestData()
+    {
+        return array(
+                'method'    =>  'GET',
+                'version'   =>  'v1',
+                'type'      =>  'defaultType',
+                'name'      =>  'defaultName',
+                'key'       =>  1,
+                'status_code' => 200,
+                'testData'  =>  'fakeOK'
+            );
+    }
+
 }

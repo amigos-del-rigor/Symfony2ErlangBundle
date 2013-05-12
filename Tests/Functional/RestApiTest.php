@@ -11,6 +11,8 @@ class RestControllerTest extends BaseTestCase
         $this->assertTrue($this->getContainer()->has('adr_symfony2erlang.channel.manager'));
         $this->assertTrue($this->getContainer()->has('adr_symfony2erlang.channel.peb.encoder'));
         $this->assertTrue($this->getContainer()->has('adr_symfony2erlang.channel.json.encoder'));
+        $this->assertTrue($this->getContainer()->has('adr_symfony2_erlang.api.rest.controller'));
+        $this->assertTrue($this->getContainer()->has('adr_symfony2_erlang.api.rest.handler.noop'));
     }
 
     public function testGetCallToRestAPI()
