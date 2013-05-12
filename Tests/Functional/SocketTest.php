@@ -22,6 +22,10 @@ class SocketTest extends BaseTestCase
         $this->assertTrue($this->getContainer()->has('adr_symfony2_erlang.api.rest.handler.noop'));
     }
 
+    //@TODO: Needs to think more about this
+    //better to implementit over erlang rest side
+    //Has no sense to fire socket server on test process
+    //
     public function testSocketClient()
     {
         $socketClient = $this->getContainer()->get('adr_symfony2erlang.channel.manager')->getChannel('socket_node0');

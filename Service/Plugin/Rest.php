@@ -11,6 +11,7 @@ class Rest implements ChannelInterface
     protected $host;
     protected $port;
     protected $encoder;
+    protected $resource;
 
     /**
      * http://guzzlephp.org/
@@ -32,18 +33,59 @@ class Rest implements ChannelInterface
      */
     public function call($resource, $data = array(), $params = null)
     {
-        $url = $resource['version'].'/'.
-            $resource['type'].'/'.
-            $resource['name'].'/'.
-            $resource['key'];
+        $this->resource = $resource;
+        $this->data = $data;
 
-        $client = new Client($this->host);
-
-        //@TODO: need to deal with rest of METHODS!!
-        $request = $client->post($url, null, $data);
-        $response = $request->send();
+        $method = $this->getMethod();
+        $response = $this->$method();
 
         return $this->encoder->decode($response->getBody());
+    }
+
+    protected function getMethod()
+    {
+        return strtolower($this->resource['method']);
+    }
+
+    protected function getRequestPath()
+    {
+        return $this->resource['version'].'/'.
+                $this->resource['type'].'/'.
+                $this->resource['name'].'/'.
+                $this->resource['key'];
+    }
+
+    protected function get()
+    {
+        $client = new Client($this->host);
+        $request = $client->get($this->getRequestPath());
+
+        return $request->send();
+    }
+
+    protected function post()
+    {
+        $client = new Client($this->host);
+
+        $request = $client->post($this->getRequestPath(), null, $this->data);
+
+        return $request->send();
+    }
+
+    protected function put()
+    {
+        $client = new Client($this->host);
+        $request = $client->put($this->getRequestPath(), null, 'this is the body');
+
+        return $request->send();
+    }
+
+    protected function delete()
+    {
+        $client = new Client($this->host);
+        $request = $client->delete($this->getRequestPath());
+
+        return $request->send();
     }
 
     public function getChannelName()

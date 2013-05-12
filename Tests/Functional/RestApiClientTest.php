@@ -7,10 +7,12 @@ use ADR\Bundle\Symfony2ErlangBundle\Tests\Functional\BaseTestCase;
 class RestApiClientTest extends BaseTestCase
 {
     protected $client;
+    protected $restClient;
 
     public function setUp()
     {
         $this->client =  $this->createClient();
+        $this->restClient = $this->getContainer()->get('adr_symfony2erlang.channel.manager')->getChannel('rest_node0');
     }
 
     public function testFunctionalCOntainerServicesAreUp()
@@ -22,21 +24,33 @@ class RestApiClientTest extends BaseTestCase
         $this->assertTrue($this->getContainer()->has('adr_symfony2_erlang.api.rest.handler.noop'));
     }
 
-
-    public function testSRestClient()
+    public function testGetRestClient()
     {
-        $restClient = $this->getContainer()->get('adr_symfony2erlang.channel.manager')->getChannel('rest_node0');
+        $response = $this->restClient->call($this->getResource('GET'));
 
-        $resources = array(
-                'method'    =>  'POST',
-                'version'   =>  'v1',
-                'type'      =>  'defaultType',
-                'name'      =>  'defaultName',
-                'key'       =>  1,
-            );
+        $this->assertResponse($response, 'GET');
+    }
 
-        $response = $restClient->call($resources);
+    public function testPostRestClient()
+    {
+        $response = $this->restClient->call($this->getResource('POST'));
+        $this->assertResponse($response, 'POST');
+    }
 
+    public function testPutRestClient()
+    {
+        $response = $this->restClient->call($this->getResource('PUT'));
+        $this->assertResponse($response, 'PUT');
+    }
+
+    public function testDeleteRestClient()
+    {
+        $response = $this->restClient->call($this->getResource('DELETE'));
+        $this->assertResponse($response, 'DELETE');
+    }
+
+    protected function assertResponse($response, $method)
+    {
         $this->assertInternalType('array', $response);
         $this->assertArrayHasKey("method", $response);
         $this->assertArrayHasKey("version", $response);
@@ -44,9 +58,20 @@ class RestApiClientTest extends BaseTestCase
         $this->assertArrayHasKey("name", $response);
         $this->assertArrayHasKey("key", $response);
         $this->assertEquals($response['version'], 'v1');
-        $this->assertEquals($response['method'], 'POST');
+        $this->assertEquals($response['method'], $method);
         $this->assertEquals($response['type'], 'defaultType');
         $this->assertEquals($response['name'], 'defaultName');
         $this->assertEquals($response['key'], 1);
+    }
+
+    protected function getResource($method)
+    {
+        return array(
+                'method'    =>  $method,
+                'version'   =>  'v1',
+                'type'      =>  'defaultType',
+                'name'      =>  'defaultName',
+                'key'       =>  1,
+            );
     }
 }
