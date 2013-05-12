@@ -10,17 +10,17 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new JMS\AopBundle\JMSAopBundle(),
-            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-            new ADR\Bundle\Symfony2ErlangBundle\ADRSymfony2ErlangBundle(),
+            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            // new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            // new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new \JMS\AopBundle\JMSAopBundle(),
+            new \JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new \ADR\Bundle\Symfony2ErlangBundle\ADRSymfony2ErlangBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            $bundles[] = new \Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+            $bundles[] = new \Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
 
         return $bundles;
