@@ -6,6 +6,17 @@ use ADR\Bundle\Symfony2ErlangBundle\Tests\Functional\BaseTestCase;
 
 class RestApiTest extends BaseTestCase
 {
+    protected $client;
+
+    public function setUp()
+    {
+        $this->client = $client = $this->createClient();
+        $noopRestHandler = $this->getContainer()->get('adr_symfony2_erlang.api.rest.handler.noop');
+
+        $this->getContainer()
+            ->set('adr_symfony2_erlang.api.rest.handler', $noopRestHandler);
+    }
+
     public function testFunctionalCOntainerServicesAreUp()
     {
         $this->assertTrue($this->getContainer()->has('adr_symfony2erlang.channel.manager'));

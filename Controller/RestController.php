@@ -32,6 +32,7 @@ class RestController
                 'name'      =>  $name,
                 'key'       =>  $key
             );
+        var_dump(get_class($this->restHandler));
         $response = $this->restHandler->handle($request);
 
         return $this->createResponse($response);
@@ -51,5 +52,15 @@ class RestController
             $statusCode,
             array('Content-Type', 'application/json')
         );
+    }
+
+    /**
+     * Used only Test Environment
+     *
+     * @param RestHandlerInterface $restHandler
+     */
+    public function setRestHandler(RestHandlerInterface $restHandler)
+    {
+        $this->restHandler = $restHandler;
     }
 }
