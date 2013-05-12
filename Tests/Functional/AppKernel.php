@@ -11,15 +11,8 @@ class AppKernel extends Kernel
     {
         $bundles = array(
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new \JMS\AopBundle\JMSAopBundle(),
-            new \JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new \ADR\Bundle\Symfony2ErlangBundle\ADRSymfony2ErlangBundle(),
         );
-
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new \Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-        }
 
         return $bundles;
     }
