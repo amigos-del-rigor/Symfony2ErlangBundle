@@ -2,4 +2,5 @@
 /Tests/Functional/logs/*
 /vendor/
 /bin/
+/report/
 composer.lock
