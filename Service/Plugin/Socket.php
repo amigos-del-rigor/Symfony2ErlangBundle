@@ -11,6 +11,8 @@ class Socket implements ChannelInterface
     protected $host;
     protected $port;
     protected $encoder;
+    protected $bufferLenght = 2048;
+
 
     public function __construct(EncoderInterface $encoder)
     {
@@ -18,6 +20,26 @@ class Socket implements ChannelInterface
     }
 
     public function call($resource, $data, $params = null) {
+
+        $socket = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
+
+//         if (!socket_connect($socket,$this->host,$this->port)) {
+//             throw new \Exception(sprintf('Connection  %s failure, on Socket Server Node: %s:%s', $this->channelName, $this->host, $this->port ));
+//         }
+
+//         echo "Successful conection \n\n";
+
+//         socket_write($socket,'resdonse');
+
+        $response = '';
+        // while($output = socket_read( $socket, $this->bufferLenght)){
+        //     echo "</br>".$output;
+        //     $response .= $output;
+        // }
+
+        socket_close($socket);
+
+        return $this->encoder->decode($response);
     }
 
     public function getChannelName()

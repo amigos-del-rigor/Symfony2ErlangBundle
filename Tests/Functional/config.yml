@@ -33,7 +33,7 @@ adr_symfony2_erlang:
         rest_node0:
             type:   rest
             config:
-                host: 'http://localhost'
+                host: 'http://sf2.erlang.local'
                 port: 80
         rpc_amqp_node0:
             type:  rpc_amqp
@@ -45,5 +45,5 @@ adr_symfony2_erlang:
         socket_node0:
             type:  socket
             config:
-                host: 'localhost'
-                port: 8080
+                host: 'sf2.erlang.local'
+                port: 5000
