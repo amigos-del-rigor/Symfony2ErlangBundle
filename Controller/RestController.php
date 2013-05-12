@@ -32,7 +32,7 @@ class RestController
                 'name'      =>  $name,
                 'key'       =>  $key
             );
-        var_dump(get_class($this->restHandler));
+        // var_dump(get_class($this->restHandler));
         $response = $this->restHandler->handle($request);
 
         return $this->createResponse($response);

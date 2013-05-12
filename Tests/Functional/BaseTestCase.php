@@ -1,8 +1,8 @@
 <?php
 namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Functional;
 
-require_once(__DIR__ . "/../../../../../../../../app/AppKernel.php");
-// use ADR\Bundle\Symfony2ErlangBundle\Tests\Functional\AppKernel;
+require_once(__DIR__ . "/AppKernel.php");
+use ADR\Bundle\Symfony2ErlangBundle\Tests\Functional\AppKernel;
 
 abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +12,7 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     public function __construct()
     {
-      $kernel = new \AppKernel("test", true);
+      $kernel = new AppKernel("test", true);
       $kernel->boot();
       $this->container = $kernel->getContainer();
       parent::__construct();
@@ -32,7 +32,7 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
             static::$kernel->shutdown();
         }
 
-        static::$kernel = new \AppKernel("test", true);
+        static::$kernel = new AppKernel("test", true);
         static::$kernel->boot();
 
         $client = static::$kernel->getContainer()->get('test.client');

@@ -1,5 +1,7 @@
 framework:
-    secret:          %secret%
+    #esi:             ~
+    #translator:      { fallback: %locale% }
+    secret:          ThisTokenIsNotSoSecretChangeIt
     router:
         resource: "%kernel.root_dir%/routing.yml"
         strict_requirements: %kernel.debug%
@@ -7,12 +9,16 @@ framework:
     csrf_protection: ~
     validation:      { enable_annotations: true }
     # templating:
-        # engines: ['twig']
-        #assets_version: SomeVersionScheme
-    default_locale:  "%locale%"
+    #     engines: ['twig']
+    #     #assets_version: SomeVersionScheme
+    default_locale:  en
     trusted_proxies: ~
     session:         ~
     fragments:       ~
+    test: ~
+
+parameters:
+    adr_symfony2_erlang.environment: linux
 
 adr_symfony2_erlang:
     environment: %adr_symfony2_erlang.environment%
@@ -35,14 +41,14 @@ adr_symfony2_erlang:
                 host: 'http://localhost'
                 port: 80
         rpc_amqp_node0:
-            type:   rpc_amqp
-            configs:
+            type:  rpc_amqp
+            config:
                 host: 'localhost'
                 port: 5672
                 user: 'guest'
                 password: 'guest'
         socket_node0:
-            type:   socket
-            configs:
+            type:  socket
+            config:
                 host: 'localhost'
                 port: 8080
