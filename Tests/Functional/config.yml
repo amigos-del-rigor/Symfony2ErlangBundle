@@ -1,6 +1,4 @@
 framework:
-    #esi:             ~
-    #translator:      { fallback: %locale% }
     secret:          ThisTokenIsNotSoSecretChangeIt
     router:
         resource: "%kernel.root_dir%/routing.yml"
@@ -8,9 +6,6 @@ framework:
     form:            ~
     csrf_protection: ~
     validation:      { enable_annotations: true }
-    # templating:
-    #     engines: ['twig']
-    #     #assets_version: SomeVersionScheme
     default_locale:  en
     trusted_proxies: ~
     session:         ~
