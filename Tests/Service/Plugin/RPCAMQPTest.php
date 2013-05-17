@@ -6,23 +6,26 @@
 
 namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Plugins;
 
-use ADR\Bundle\Symfony2ErlangBundle\Lib\Plugins\RPCAMQP;
+use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\RpcAmqp;
+use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\JsonEncoder;
 
-class RPCAMQPTest extends \PHPUnit_Framework_TestCase {
+class RpcAmqpTest extends \PHPUnit_Framework_TestCase {
+
+    protected $rpcAmqp;
+
+    public function setUp()
+    {
+        $encoder = new JsonEncoder();
+        $this->rpcAmqp = new RpcAmqp($encoder);
+        $this->rpcAmqp->setHost('localhost');
+        $this->rpcAmqp->setPort(5672);
+        $this->rpcAmqp->setUser('guest');
+        $this->rpcAmqp->setPassword('guest');
+    }
 
     public function testCall()
     {
-        // $channelsParams = array(
-        //     'rpc_amqp_node0' => array(
-        //         'host' => 'localhost',
-        //         'port' => 5672,
-        //         'user' => 'guest',
-        //         'password' => 'guest'
-        // ));
-        // $plugin = new RPCAMQP($channelsParams);
-        // $plugin->setChannel('rpc_amqp_node0');
-        // $plugin->getChannel();
-        // $result = $plugin->call('mymodule', 'sum', 30);
-        // $this->assertEquals(31, $result);
+        $result = $this->rpcAmqp->call('mymodule', 'sum', array(30));
+        $this->assertEquals($result, 31);
     }
 }

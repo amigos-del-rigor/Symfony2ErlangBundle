@@ -37,9 +37,7 @@ class RpcAmqp implements ChannelInterface
         $this->response = null;
         $this->corrId = uniqid();
 
-        // TODO
-//        $encodedParams = $this->encoder->encode($params);
-        $encodedParams = $params;
+        $encodedParams = $this->encoder->encode($params);
 
         $msg = new AMQPMessage(
             (string) $encodedParams,
@@ -50,10 +48,7 @@ class RpcAmqp implements ChannelInterface
         while(!$this->response) {
             $this->amqpChannel->wait();
         }
-        //return intval($this->response);
-        // TODO
-//        return $this->encoder->decode($this->response);
-        return $this->response;
+        return $this->encoder->decode($this->response);
     }
 
     protected function openChannel() {

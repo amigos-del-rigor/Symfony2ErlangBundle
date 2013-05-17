@@ -8,8 +8,12 @@ main(_) ->
     io:format(" [*] Waiting for messages. To exit press CTRL+C~n"),
 
     RpcHandler = fun(X) ->
-        Value = list_to_integer(binary_to_list(X)),
-        io:format("[rpc_handler] ~p -> ~p", [X, Value]),
+        io:format("[rpc_handler] ~p", [X]),
+        % X is json: [Number]
+        ListData = binary_to_list(X),
+        Decoded = string:substr(ListData, 2, string:len(ListData)-2),
+        Value = list_to_integer(Decoded),
+        io:format(" -> ~p", [Value]),
         Result = Value + 1,
         integer_to_binary(Result)
     end,
