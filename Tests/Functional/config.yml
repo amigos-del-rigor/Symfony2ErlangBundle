@@ -12,11 +12,7 @@ framework:
     fragments:       ~
     test: ~
 
-parameters:
-    adr_symfony2_erlang.environment: linux
-
 adr_symfony2_erlang:
-    environment: %adr_symfony2_erlang.environment%
     channels:
         peb_node0:
             type:   peb

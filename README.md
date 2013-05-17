@@ -11,7 +11,6 @@ Quick start
     On config.yml:
 
         adr_symfony2_erlang:
-            environment: %adr_symfony2_erlang.environment%
             channels: %adr_symfony2_erlang.channels%
 
     configure your channels on parameters.yml
