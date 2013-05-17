@@ -21,7 +21,8 @@ Class PebEncoder implements EncoderInterface
         if($type == 'vencode') {
             return peb_vencode($data[0], array($values));
         }
-
+        // var_dump($data[0]);
+        // var_dump(array($values));
         return peb_encode($data[0], array($values));
     }
 
