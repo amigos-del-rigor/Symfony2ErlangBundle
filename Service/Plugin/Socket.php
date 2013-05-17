@@ -27,9 +27,9 @@ class Socket implements ChannelInterface
 //             throw new \Exception(sprintf('Connection  %s failure, on Socket Server Node: %s:%s', $this->channelName, $this->host, $this->port ));
 //         }
 
-//         echo "Successful conection \n\n";
+        echo "Successful conection \n\n";
 
-//         socket_write($socket,'resdonse');
+        socket_write($socket,'resdonse');
 
         $response = '';
         // while($output = socket_read( $socket, $this->bufferLenght)){
