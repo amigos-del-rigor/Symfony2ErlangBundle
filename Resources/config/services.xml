@@ -14,9 +14,6 @@
         <service id="adr_symfony2_erlang.channel.peb" class="ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\Peb">
             <argument type="service" id="adr_symfony2_erlang.channel.peb.encoder" />
             <tag name="erlang.channel" channel="peb"/>
-            <call method="setEnvironment">
-                <argument>%adr_symfony2_erlang.environment%</argument>
-            </call>
         </service>
 
         <service id="adr_symfony2_erlang.channel.rest" class="ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\Rest">

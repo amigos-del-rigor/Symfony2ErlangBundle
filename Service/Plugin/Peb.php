@@ -17,6 +17,10 @@ class Peb implements ChannelInterface
     public function __construct(EncoderInterface $encoder)
     {
         $this->encoder = $encoder;
+
+        // OS
+        $os = php_uname('s');
+        if($os == "Darwin") $this->environment = 'mac';
     }
 
     /**
@@ -74,11 +78,6 @@ class Peb implements ChannelInterface
      */
     public function closeChannel() {
         peb_close($this->link);
-    }
-
-    public function setEnvironment($environment)
-    {
-        $this->environment = $environment;
     }
 
     public function setChannelName($channelName)
