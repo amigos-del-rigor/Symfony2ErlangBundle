@@ -2,13 +2,10 @@
 namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Socket;
 error_reporting(E_ALL);
 set_time_limit(0);
-
-/* Activar el volcado de salida implícito, así veremos lo que estamo obteniendo mientras llega. */
 ob_implicit_flush();
 
 class SocketServer
 {
-    // protected $address = '192.168.1.38';
     protected $address = '127.0.0.1';
     protected $port = 10001;
     protected $socket;
