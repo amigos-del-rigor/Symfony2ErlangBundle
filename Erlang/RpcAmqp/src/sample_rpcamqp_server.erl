@@ -15,13 +15,6 @@ run() ->
     lager:debug("Decoded: ~p", [Decoded]),
     Result = lists:sum(Decoded),
     lager:debug("Result: ~p", [Result]),
-% X is json: [Number]
-%%     ListData = binary_to_list(X),
-%%     Decoded = string:substr(ListData, 2, string:len(ListData)-2),
-%%     Value = list_to_integer(Decoded),
-%%     lager:debug(" -> ~p", [Value]),
-%%     Result = Value + 1,
-%%     integer_to_binary(Result)
     jsx:encode(Result)
   end,
   _Server = amqp_rpc_server:start(Connection, <<"mymodule:sum">>, RpcHandler),
