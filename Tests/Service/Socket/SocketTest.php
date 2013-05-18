@@ -15,15 +15,14 @@ class SocketTest extends SocketServerTest
     public function testBasicConnectionToSocketServer()
     {
         $this->startServer();
-
-        $process = new Process('telnet 192.168.1.104 10001');
+        $process = new Process(sprintf('telnet %s %s', $this->address, $this->port));
         $process->start();
 
         $process->wait(function ($type, $buffer) {
             $this->buffer .=$buffer;
         });
 
-        $this->assertTrue(strrpos($this->buffer, "Connected to 192.168.1.104") > 0);
+        $this->assertTrue(strrpos($this->buffer, sprintf("Connected to %s", $this->address)) > 0);
 
         $this->stopServer();
     }

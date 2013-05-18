@@ -6,8 +6,7 @@ use Symfony\Component\Process\Process;
 
 abstract class SocketServerTest extends \PHPUnit_Framework_TestCase
 {
-
-    protected $address = '192.168.1.104';
+    protected $address = '127.0.0.1';
 
     /**
      * @var server port
@@ -19,11 +18,14 @@ abstract class SocketServerTest extends \PHPUnit_Framework_TestCase
      */
     protected $process;
 
+    /**
+     * @var integer Buffer lenght
+     */
     protected $bufferLenght = 2048;
+
     /**
      * Starts the test server.
      *
-     * @param string $router Router script.
      * @param int $port Server port.
      */
     public function startServer($port = 0)

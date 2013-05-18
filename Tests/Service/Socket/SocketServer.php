@@ -8,36 +8,30 @@ ob_implicit_flush();
 
 class SocketServer
 {
-    protected $address = '192.168.1.104';
+    // protected $address = '192.168.1.38';
+    protected $address = '127.0.0.1';
     protected $port = 10001;
+    protected $socket;
 
     public function start()
     {
-        if (($sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
-            echo "socket_create() falló: razón: " . socket_strerror(socket_last_error()) . "\n";
-        }
-
-        if (socket_bind($sock, $this->address, $this->port) === false) {
-            echo "socket_bind() falló: razón: " . socket_strerror(socket_last_error($sock)) . "\n";
-        }
-
-        if (socket_listen($sock, 5) === false) {
-            echo "socket_listen() falló: razón: " . socket_strerror(socket_last_error($sock)) . "\n";
-        }
+        $this->socketInit();
+        $this->socketBind();
+        $this->socketListen();
 
         do {
-            if (($msgsock = socket_accept($sock)) === false) {
-                echo "socket_accept() falló: razón: " . socket_strerror(socket_last_error($sock)) . "\n";
+            if (($msgsock = socket_accept($this->socket)) === false) {
+                throw new \Exception(sprintf("Failure On socket_accept(), error: %s", $this->getSocketError()));
                 break;
             }
-            /* Enviar instrucciones. */
-            $msg = "\nBienvenido al Servidor De Prueba de PHP. \n" .
-                "Para salir, escriba 'quit'. Para cerrar el servidor escriba 'shutdown'.\n";
+
+            $msg = "\nWelcome to test php socket server. \n" .
+                "exit with 'quit'. To close server just write'shutdown'.\n";
             socket_write($msgsock, $msg, strlen($msg));
 
             do {
                 if (false === ($buf = socket_read($msgsock, 2048, PHP_NORMAL_READ))) {
-                    echo "socket_read() falló: razón: " . socket_strerror(socket_last_error($msgsock)) . "\n";
+                    throw new \Exception(sprintf("Failure On socket_read(), error: %s", $this->getSocketError($msgsock)));
                     break 2;
                 }
                 if (!$buf = trim($buf)) {
@@ -51,18 +45,45 @@ class SocketServer
                     break 2;
                 }
 
-                $talkback = "PHP: Usted dijo '$buf'.\n";
-                socket_write($msgsock, $talkback, strlen($talkback));
-                echo "$buf\n";
+                $response = sprintf("Socket server says: %s", $buf);
+                socket_write($msgsock, $response, strlen($response));
+                echo "$response\n";
 
             } while (true);
             socket_close($msgsock);
 
         } while (true);
 
-        socket_close($sock);
+        socket_close($this->socket);
     }
 
+    protected function socketInit()
+    {
+        if (($this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
+            throw new \Exception(sprintf("Failure On socket_create(), error: %s", $this->getSocketError(null)));
+        }
+    }
+
+    protected function socketBind()
+    {
+        if (socket_bind($this->socket, $this->address, $this->port) === false) {
+            throw new \Exception(sprintf("Failure On socket_bind(), error: %s", $this->getSocketError()));
+        }
+    }
+
+    protected function socketListen()
+    {
+        if (socket_listen($this->socket, 5) === false) {
+            throw new \Exception(sprintf("Failure On socket_listen(), error: %s", $this->getSocketError()));
+        }
+    }
+
+    protected function getSocketError($parameter = 'socket')
+    {
+        $socket = ($parameter === 'socket') ? $this->socket : $parameter;
+
+        return socket_strerror(socket_last_error($socket));
+    }
 }
 
 $server = new SocketServer();
