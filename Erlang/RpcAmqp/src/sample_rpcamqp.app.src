@@ -1,0 +1,11 @@
+{application, sample_rpcamqp,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+    kernel, sasl, stdlib, crypto, compiler, syntax_tools, lager, jsx
+  ]},
+  {mod, { sample_rpcamqp_app, []}},
+  {env, []}
+ ]}.

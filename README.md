@@ -61,8 +61,8 @@ Start test:
 
     # RPC-AMQP
     Start RabbitMQ
-    cd Erlang/RPC_AMQP
-    ./rpc_server.erl
+    cd Erlang/RpcAmqp
+    make run
 
     # test
     phpunit
