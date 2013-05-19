@@ -14,6 +14,10 @@ class SocketTest extends SocketServerTest
 
     public function testBasicConnectionToSocketServer()
     {
+ // Stop here and mark this test as incomplete.
+        // $this->markTestIncomplete(
+        //   'This test has not been implemented yet.'
+        // );
         $this->startServer();
         $process = new Process(sprintf('telnet %s %s', $this->address, $this->port));
         $process->start();
