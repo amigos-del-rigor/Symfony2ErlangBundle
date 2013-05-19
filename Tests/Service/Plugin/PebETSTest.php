@@ -54,12 +54,12 @@ class PebETSTest extends \PHPUnit_Framework_TestCase {
     {
         //ets:new(test, [set, named_table, public]).
         $result = $this->peb->call(
-            'ets', 'new', array('teste',array('set', 'named_table'))
+            'ets', 'new', array('teste', array('set', 'named_table', 'public'))
         );
-        // var_dump($result);
+        var_dump($result);
         $this->assertEquals($result, 'teste');
-        // $result = $this->peb->call('ets', 'info', array('teste'));
-        // var_dump($result);
+        $result = $this->peb->call('ets', 'info', array('teste'));
+        var_dump($result);
     }
 
 
