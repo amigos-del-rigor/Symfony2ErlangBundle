@@ -5,13 +5,15 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Service\Plugin;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\ChannelInterface;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\EncoderInterface;
 
-class Socket implements ChannelInterface
+//implements ChannelInterface
+class Socket
 {
     protected $channelName;
     protected $host;
     protected $port;
     protected $encoder;
     protected $bufferLenght = 2048;
+    protected $socket;
 
 
     public function __construct(EncoderInterface $encoder)
@@ -21,25 +23,29 @@ class Socket implements ChannelInterface
 
     public function call($resource, $data, $params = null) {
 
-        $socket = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
+        if(!$this->socket) {
+            $this->openChannel();
+        }
 
-//         if (!socket_connect($socket,$this->host,$this->port)) {
-//             throw new \Exception(sprintf('Connection  %s failure, on Socket Server Node: %s:%s', $this->channelName, $this->host, $this->port ));
-//         }
+        socket_write($this->socket, $resource);
+        $output = socket_read( $this->socket, $this->bufferLenght);
 
-        echo "Successful conection \n\n";
+        return $this->encoder->decode($output);
 
-        socket_write($socket,'resdonse');
+    }
 
-        $response = '';
-        // while($output = socket_read( $socket, $this->bufferLenght)){
-        //     echo "</br>".$output;
-        //     $response .= $output;
-        // }
+    protected function openChannel()
+    {
+        $this->socket = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
 
-        socket_close($socket);
+        if (!socket_connect($this->socket, $this->host, $this->port)) {
+            throw new \Exception(sprintf('Connection  %s failure, on Socket Server Node: %s:%s', $this->channelName, $this->host, $this->port ));
+        }
+    }
 
-        return $this->encoder->decode($response);
+    public function closeChannel()
+    {
+         socket_close($this->socket);
     }
 
     public function getChannelName()

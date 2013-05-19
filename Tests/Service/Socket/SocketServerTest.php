@@ -6,12 +6,13 @@ use Symfony\Component\Process\Process;
 
 abstract class SocketServerTest extends \PHPUnit_Framework_TestCase
 {
+
     protected $address = '127.0.0.1';
 
     /**
      * @var server port
      */
-    protected $port = 10001;
+    protected $port = 10020;
 
     /**
      * @var Process
@@ -51,6 +52,11 @@ abstract class SocketServerTest extends \PHPUnit_Framework_TestCase
         if ($this->process) {
             $this->process->stop();
         }
+    }
+
+    public function checkIsRunning()
+    {
+        return $this->process->isRunning();
     }
 
     /**

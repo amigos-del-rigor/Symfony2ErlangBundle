@@ -76,7 +76,7 @@ class Peb implements ChannelInterface
      * $this->link gets connection when success
      */
     protected function openChannel() {
-        $connectionParams = ($this->environment === 'linux') ? array($this->node, $this->cookie) : array($this->node, $this->cookie, $this->timeout);
+        // $connectionParams = ($this->environment === 'linux') ? array($this->node, $this->cookie) : array($this->node, $this->cookie, $this->timeout);
 
         $this->link = $this->getConnection();
 
@@ -97,7 +97,8 @@ class Peb implements ChannelInterface
     /**
      * Close Channel connection
      */
-    public function closeChannel() {
+    public function closeChannel()
+    {
         peb_close($this->link);
     }
 
