@@ -9,18 +9,13 @@ class Peb implements ChannelInterface
     protected $channelName;
     protected $node;
     protected $cookie;
-    protected $tiemout;
+    protected $timeout;
     protected $encoder;
     protected $link = false;
-    protected $environment = 'linux';
 
     public function __construct(EncoderInterface $encoder)
     {
         $this->encoder = $encoder;
-
-        // OS
-        $os = php_uname('s');
-        if($os == "Darwin") $this->environment = 'mac';
     }
 
     /**
@@ -76,8 +71,6 @@ class Peb implements ChannelInterface
      * $this->link gets connection when success
      */
     protected function openChannel() {
-        $connectionParams = ($this->environment === 'linux') ? array($this->node, $this->cookie) : array($this->node, $this->cookie, $this->timeout);
-
         $this->link = $this->getConnection();
 
         if (!$this->link) {
@@ -87,10 +80,6 @@ class Peb implements ChannelInterface
 
     protected function getConnection()
     {
-        if($this->environment === 'linux') {
-            return peb_connect($this->node, $this->cookie);
-        }
-
         return peb_connect($this->node, $this->cookie, $this->timeout);
     }
 

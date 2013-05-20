@@ -15,7 +15,7 @@ class PebETSTest extends \PHPUnit_Framework_TestCase {
         $this->peb = new Peb($encoder);
         $this->peb->setNode('node0@127.0.0.1');
         $this->peb->setCookie('abc');
-        $this->peb->setTimeout(2);
+        $this->peb->setTimeout(200);
        //$this->addFixture();
     }
 
