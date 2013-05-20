@@ -34,7 +34,7 @@ class Socket
 
     }
 
-    protected function openChannel()
+    public function openChannel()
     {
         $this->socket = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
 

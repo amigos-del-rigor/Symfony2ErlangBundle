@@ -5,6 +5,7 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Socket;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\Socket;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\JsonEncoder;
 use ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Socket\SocketServerTest;
+use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\NoopEncoder;
 
 use Symfony\Component\Process\Process;
 
@@ -12,12 +13,7 @@ class SocketTest extends SocketServerTest
 {
     protected $buffer;
 
-    /**
-     * @large
-     *
-     * @group long
-     * @return [type] [description]
-     */
+
     public function testBasicConnectionToSocketServer()
     {
         $this->startServer();
@@ -33,23 +29,28 @@ class SocketTest extends SocketServerTest
         $this->stopServer();
     }
 
-
+    /**
+     * @large
+     *
+     * @group long
+     * @return [type] [description]
+     */
     public function testServerOnLongPooling()
     {
         $this->startServer();
 
-        for ($i=0; $i < 1; $i++) {
-            $command = 'php Tests/Service/Socket/SocketClient.php';
-            $this->process = new Process($command);
-            $this->process->start();
+        $encoder = new NoopEncoder();
+        $socket = new Socket($encoder);
+        $socket->setChannelName('testChannel');
+        $socket->setHost('127.0.0.1');
+        $socket->setPort(10020);
+        // $response =$socket->call('test', array());
 
-            $this->process->wait(function ($type, $buffer) {
-                $this->buffer .=$buffer;
-            });
+        var_dump($this->checkIsRunning());
+        $response =$socket->call('shutdown', array());
+        var_dump($this->checkIsRunning());
+        $this->assertContains("Welcome to test php socket server", $response);
 
-            $this->assertContains("Welcome to test php socket server", $this->buffer);
-        }
         $this->stopServer();
-
     }
 }

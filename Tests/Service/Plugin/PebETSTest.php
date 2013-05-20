@@ -4,19 +4,72 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Plugin;
 
 use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\Peb;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebEncoder;
+use Symfony\Component\Process\Process;
 
-class PebETSTest extends \PHPUnit_Framework_TestCase {
+class PebETSTest extends \PHPUnit_Framework_TestCase
+{
 
+    protected $process;
     protected $peb;
+
+    /**
+     * @group node
+     * @return [type] [description]
+     */
+    public function testCreateCNode()
+    {
+        //ets:new(test, [set, named_table, public]).
+        $result = $this->peb->call(
+            'ets', 'new', array('testing', array('set', 'named_table', 'public'))
+        );
+        var_dump($result);
+        $this->assertEquals($result, 'testing');
+        $result = $this->peb->call('ets', 'info', array('testing'));
+        var_dump($result);
+    }
 
     public function setUp()
     {
+        $this->startCNode();
         $encoder = new PebEncoder();
         $this->peb = new Peb($encoder);
-        $this->peb->setNode('node0@127.0.0.1');
+        $this->peb->setNode('node1@127.0.0.1');
         $this->peb->setCookie('abc');
         $this->peb->setTimeout(2);
        //$this->addFixture();
+    }
+
+    protected function launchCnode()
+    {
+        $command = 'erl -sname node1 -setcookie abc';
+        $this->process = new Process($command);
+        $this->process->start();
+    }
+
+    public function startCNode()
+    {
+        if ($this->process) {
+            echo "process Running";
+            $this->process->stop();
+        }
+
+        // $command = 'erl -sname node1 -setcookie abc';
+        // $this->process = new Process($command);
+        // $this->process->start();
+        $this->launchCnode();
+        for ($i=0; $i < 1000000; $i++) {
+            if ($this->process->isRunning() === false) {
+                $this->launchCnode();
+                echo "launching NODE";
+            }
+            var_dump($this->process->isRunning());
+            //sleep(1);
+        }
+        // sleep(1);
+        if (!$this->process->isRunning()) {
+            $this->fail('Could not start C Node');
+        }
+        die();
     }
 
     public function testInsertETSCall()
@@ -65,10 +118,14 @@ class PebETSTest extends \PHPUnit_Framework_TestCase {
 
     public function tearDown()
     {
-        //ets:delete(table).
-         // $result = $this->peb->call('ets', 'delete', array('test'));
-         // var_dump($result);
-        //$this->assertEquals($result, 'true');
-
+        // //ets:delete(table).
+        // $result = $this->peb->call('ets', 'delete', array('testing'));
+        // var_dump($result);
+        // $this->assertEquals($result, 'true');
+        // $result = $this->peb->closeChannel();
+        // var_dump($result);
+        // if ($this->process) {
+        //     $this->process->stop();
+        // }
     }
 }
