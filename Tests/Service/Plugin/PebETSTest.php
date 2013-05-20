@@ -22,20 +22,20 @@ class PebETSTest extends \PHPUnit_Framework_TestCase
         $result = $this->peb->call(
             'ets', 'new', array('testing', array('set', 'named_table', 'public'))
         );
-        var_dump($result);
+        // var_dump($result);
         $this->assertEquals($result, 'testing');
-        $result = $this->peb->call('ets', 'info', array('testing'));
-        var_dump($result);
+        // $result = $this->peb->call('ets', 'info', array('testing'));
+        // var_dump($result);
     }
 
     public function setUp()
     {
-        $this->startCNode();
+        //$this->startCNode();
         $encoder = new PebEncoder();
         $this->peb = new Peb($encoder);
-        $this->peb->setNode('node1@127.0.0.1');
+        $this->peb->setNode('node0@127.0.0.1');
         $this->peb->setCookie('abc');
-        $this->peb->setTimeout(2);
+        $this->peb->setTimeout(200);
        //$this->addFixture();
     }
 
@@ -99,22 +99,6 @@ class PebETSTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result[5][1], 1);
         $this->assertEquals($result[7][1], 'true');
     }
-
-    /**
-     * @group test
-     */
-    public function testAddFixture()
-    {
-        //ets:new(test, [set, named_table, public]).
-        $result = $this->peb->call(
-            'ets', 'new', array('teste', array('set', 'named_table', 'public'))
-        );
-        var_dump($result);
-        $this->assertEquals($result, 'teste');
-        $result = $this->peb->call('ets', 'info', array('teste'));
-        var_dump($result);
-    }
-
 
     public function tearDown()
     {

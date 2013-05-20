@@ -14,20 +14,20 @@ class SocketTest extends SocketServerTest
     protected $buffer;
 
 
-    public function testBasicConnectionToSocketServer()
-    {
-        $this->startServer();
-        $process = new Process(sprintf('telnet %s %s', $this->address, $this->port));
-        $process->start();
+    // public function testBasicConnectionToSocketServer()
+    // {
+    //     $this->startServer();
+    //     $process = new Process(sprintf('telnet %s %s', $this->address, $this->port));
+    //     $process->start();
 
-        $process->wait(function ($type, $buffer) {
-            $this->buffer .=$buffer;
-        });
+    //     $process->wait(function ($type, $buffer) {
+    //         $this->buffer .=$buffer;
+    //     });
 
-        $this->assertContains(sprintf("Connected to %s", $this->address), $this->buffer);
+    //     $this->assertContains(sprintf("Connected to %s", $this->address), $this->buffer);
 
-        $this->stopServer();
-    }
+    //     $this->stopServer();
+    // }
 
     /**
      * @large
@@ -46,9 +46,9 @@ class SocketTest extends SocketServerTest
         $socket->setPort(10020);
         // $response =$socket->call('test', array());
 
-        var_dump($this->checkIsRunning());
+        // var_dump($this->checkIsRunning());
         $response =$socket->call('shutdown', array());
-        var_dump($this->checkIsRunning());
+        // var_dump($this->checkIsRunning());
         $this->assertContains("Welcome to test php socket server", $response);
 
         $this->stopServer();

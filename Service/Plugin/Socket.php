@@ -5,8 +5,7 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Service\Plugin;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\ChannelInterface;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\EncoderInterface;
 
-//implements ChannelInterface
-class Socket
+class Socket implements ChannelInterface
 {
     protected $channelName;
     protected $host;
