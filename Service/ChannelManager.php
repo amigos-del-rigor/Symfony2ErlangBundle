@@ -44,4 +44,14 @@ Class ChannelManager
     {
         return $channel->getName();
     }
+
+    /**
+     * Used Only on testing environment
+     *
+     * @return array
+     */
+    public function getChannels()
+    {
+        return $this->channels;
+    }
 }
