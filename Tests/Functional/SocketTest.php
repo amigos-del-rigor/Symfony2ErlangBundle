@@ -2,9 +2,9 @@
 
 namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Functional;
 
-use ADR\Bundle\Symfony2ErlangBundle\Tests\Functional\BaseTestCase;
+use ADR\Bundle\Symfony2ErlangBundle\Tests\Functional\AbstractWebTestCase;
 
-class SocketTest extends BaseTestCase
+class SocketTest extends AbstractWebTestCase
 {
     protected $client;
 
