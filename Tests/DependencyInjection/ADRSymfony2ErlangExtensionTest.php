@@ -15,84 +15,32 @@ use Mockery;
 class ADRSymfony2ErlangExtensionTest extends \PHPUnit_Framework_TestCase
 {
     protected $container;
+    protected $extension;
 
     public function setUp()
     {
         $this->container = new ContainerBuilder();
-
         $config = Yaml::parse($this->getBundleConfig());
-        $extension = new ADRSymfony2ErlangExtension();
-        $extension->load(array($config), $this->container);
-        $compilerPass = new PluginsCompilerPass();
-        $compilerPass->process($this->container);
+        $this->extension = new ADRSymfony2ErlangExtension();
+        $this->extension->load(array($config), $this->container);
     }
 
-    public function testChannelManagerAndServiceDefinitionsAfterCompilerPass()
+    public function testContainerDefinitionArLoadExtension()
     {
         $this->assertTrue($this->container->hasParameter('adr_symfony2_erlang.configured.channels'));
-        $this->assertTrue($this->container->has('adr_symfony2erlang.channel.manager'));
-        $this->assertServices();
-    }
 
-    public function testChannelManagerLoads()
-    {
-        $channelManager = $this->container->get('adr_symfony2erlang.channel.manager');
-        $this->assertInstanceOf('ADR\Bundle\Symfony2ErlangBundle\Service\ChannelManager', $channelManager);
-
-        $channels = $channelManager->getChannels();
-        $this->assertInternalType('array', $channels);
-        $this->assertCount(5, $channels);
-
-        $this->arrayHasKey('peb_node0', $channels);
-        $this->arrayHasKey('peb_node1', $channels);
-        $this->arrayHasKey('rest_node0', $channels);
-        $this->arrayHasKey('rpc_amqp_node0', $channels);
-        $this->arrayHasKey('socket_node0', $channels);
-    }
-
-    /**
-     *@dataProvider channelProvider
-     */
-    public function testPebChannelFromChannelMannager($channelName, $channelType)
-    {
-        $pebChannel = $this->container->get('adr_symfony2erlang.channel.manager')->getChannel($channelName);
-        $this->assertInstanceOf('ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\\'.$channelType, $pebChannel);
-
-        $this->assertEquals($channelName, $pebChannel->getChannelName());
-
-    }
-
-    public function channelProvider()
-    {
-        return array(
-            array('peb_node0', 'Peb'),
-            array('peb_node1', 'Peb'),
-            array('rest_node0', 'Rest'),
-            array('rpc_amqp_node0', 'RpcAmqp'),
-            array('socket_node0', 'Socket')
-        );
-    }
-
-    public function testContainerAfterCompile()
-    {
-        $this->container->getCompilerPassConfig()->setOptimizationPasses(array());
-        $this->container->getCompilerPassConfig()->setRemovingPasses(array());
-        $this->container->compile();
-
-        $this->assertServices();
-    }
-
-    protected function assertServices()
-    {
-        $this->assertTrue($this->container->has('adr_symfony2_erlang.channel.peb.encoder'));
-        $this->assertTrue($this->container->has('adr_symfony2_erlang.channel.json.encoder'));
-        $this->assertTrue($this->container->has('adr_symfony2_erlang.channel.peb'));
-        $this->assertTrue($this->container->has('adr_symfony2_erlang.channel.rest'));
-        $this->assertTrue($this->container->has('adr_symfony2_erlang.channel.rpc_amqp'));
-        $this->assertTrue($this->container->has('adr_symfony2_erlang.channel.socket'));
-        $this->assertTrue($this->container->has('adr_symfony2_erlang.api.rest.controller'));
-        $this->assertTrue($this->container->has('adr_symfony2_erlang.api.rest.handler.noop'));
         $this->assertTrue($this->container->has('adr_symfony2_erlang.api.rest.handler'));
+
+        $alias = $this->container->getAlias('adr_symfony2_erlang.api.rest.handler');
+        $this->assertEquals(
+            $this->container->getDefinition($alias)->getClass(),
+            $this->container->getDefinition('adr_symfony2_erlang.api.rest.handler.noop')->getClass()
+        );
+
+        $this->assertContains(
+            $this->container->getDefinition($alias)->getClass(),
+            $this->extension->getClassesToCompile()
+        );
     }
 
     protected function getBundleConfig()
