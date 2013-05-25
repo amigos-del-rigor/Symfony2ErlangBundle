@@ -1,86 +1,48 @@
 <?php
 namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Socket;
-// error_reporting(E_ALL);
 set_time_limit(0);
-// ob_implicit_flush();
 
 class SocketServer
 {
-    protected $address = '127.0.0.1';
-    protected $port = 10020;
-    protected $socket;
+    protected $host;
+    protected $port;
+
+    public function __construct($host = '127.0.0.1', $port = '10000')
+    {
+        $this->host = $host;
+        $this->port = $port;
+    }
 
     public function start()
     {
-        $this->socketInit();
-        $this->socketBind();
-        $this->socketListen();
+        // $host = '127.0.0.1';
+        // $port = '10003';
+        // create socket
+        $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");
+        $result = socket_bind($socket, $this->host, $this->port) or die("Could not bind to socket\n");
+        $result = socket_listen($socket, 3) or die("Could not set up socket listener\n");
 
-        do {
-            if (($msgsock = socket_accept($this->socket)) === false) {
-                throw new \Exception(sprintf("Failure On socket_accept(), error: %s", $this->getSocketError()));
-                break;
+        // accept incoming connections and spawn another socket to handle communication
+        while(true)
+        {
+            $spawn = socket_accept($socket) or die("Could not accept incoming connection\n");
+
+            while(true) {
+                $input = socket_read($spawn, 30) or die("Could not read input\n");
+
+                socket_write($spawn, $input, strlen ($input)) or die("Could not write output\n");
+
             }
 
-            $msg = "\nWelcome to test php socket server. \n" ;
-            socket_write($msgsock, $msg, strlen($msg));
-
-            do {
-                if (false === ($buf = socket_read($msgsock, 2048, PHP_NORMAL_READ))) {
-                    break 2;
-                }
-
-                if (!$buf = trim($buf)) {
-                    continue;
-                }
-
-                if ($buf == 'shutdown') {
-                    socket_close($msgsock);
-                    break 2;
-                }
-
-                $response = sprintf("Socket server says: %s \n", $buf);
-                socket_write($msgsock, $response, strlen($response));
-
-            } while (true);
-            socket_close($msgsock);
-
-        } while (true);
-
-        socket_close($this->socket);
-    }
-
-    protected function socketInit()
-    {
-        if (($this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) === false) {
-            throw new \Exception(sprintf("Failure On socket_create(), error: %s", $this->getSocketError(null)));
+            socket_close($spawn);
         }
-    }
-
-    protected function socketBind()
-    {
-        if (socket_bind($this->socket, $this->address, $this->port) === false) {
-            throw new \Exception(sprintf("Failure On socket_bind(), error: %s", $this->getSocketError()));
-        }
-    }
-
-    protected function socketListen()
-    {
-        if (socket_listen($this->socket, 5) === false) {
-            throw new \Exception(sprintf("Failure On socket_listen(), error: %s", $this->getSocketError()));
-        }
-    }
-
-    protected function getSocketError($parameter = 'socket')
-    {
-        $socket = ($parameter === 'socket') ? $this->socket : $parameter;
-
-        return socket_strerror(socket_last_error($socket));
+        socket_close($socket);
     }
 }
 
-$server = new SocketServer();
-$server->start();
+if (!isset($argv[1]) || !isset($argv[2])) {
+    throw new \Exception('Socket server needs to be called as: php SocketServer 127.0.0.1 10000');
+}
 
-
-?>
+$altSocketServer = new SocketServer($argv[1], $argv[2]);
+$altSocketServer->start();

@@ -4,15 +4,22 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Socket;
 
 use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\Socket;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\JsonEncoder;
-use ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Socket\SocketServerTest;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\NoopEncoder;
+use ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Socket\SocketServerProcess;
 
 use Symfony\Component\Process\Process;
 
-class SocketTest extends SocketServerTest
+class SocketTest extends SocketServerProcess
 {
     protected $buffer;
+    protected $socket;
 
+    protected $host = '127.0.0.1';
+
+    /**
+     * @var server port
+     */
+    protected $port = 10015;
 
     // public function testBasicConnectionToSocketServer()
     // {
@@ -29,28 +36,37 @@ class SocketTest extends SocketServerTest
     //     $this->stopServer();
     // }
 
+    public function setUp()
+    {
+        $this->startServer($this->host, $this->port);
+
+        $encoder = new NoopEncoder();
+        $this->socket = new Socket($encoder);
+        $this->socket->setChannelName('testChannel');
+        $this->socket->setHost($this->host);
+        $this->socket->setPort($this->port);
+    }
     /**
      * @large
      *
      * @group long
      * @return [type] [description]
      */
-    public function testServerOnLongPooling()
+    public function testOnOpenChannelOverServer()
     {
-        $this->startServer();
+        $response =$this->socket->call('test', array());
+        $this->assertContains("test", $response);
 
-        $encoder = new NoopEncoder();
-        $socket = new Socket($encoder);
-        $socket->setChannelName('testChannel');
-        $socket->setHost('127.0.0.1');
-        $socket->setPort(10020);
-        // $response =$socket->call('test', array());
+        $response =$this->socket->call('nextMessage', array());
+        $this->assertContains("nextMessage", $response);
 
-        // var_dump($this->checkIsRunning());
-        $response =$socket->call('shutdown', array());
-        // var_dump($this->checkIsRunning());
-        $this->assertContains("Welcome to test php socket server", $response);
+        $response =$this->socket->call('packet3', array());
+        $this->assertContains("packet3", $response);
+    }
 
+    public function tearDown()
+    {
+        $this->socket = null;
         $this->stopServer();
     }
 }

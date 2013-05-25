@@ -26,8 +26,14 @@ class Socket implements ChannelInterface
             $this->openChannel();
         }
 
-        socket_write($this->socket, $resource);
-        $output = socket_read( $this->socket, $this->bufferLenght);
+        $status = socket_sendto($this->socket, $resource, strlen($resource), MSG_EOF, $this->host, $this->port);
+
+        $output = '';
+        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, array("sec"=>0, "usec"=>10));
+        while ($status = socket_read($this->socket, $this->bufferLenght))
+        {
+            $output .= $status;
+        }
 
         return $this->encoder->decode($output);
 
