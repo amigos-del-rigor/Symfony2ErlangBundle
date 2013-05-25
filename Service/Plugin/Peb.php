@@ -52,7 +52,7 @@ class Peb implements ChannelInterface
 
         } elseif ($functionName === 'delete') {
 
-            $parameters = array("[~a]", $params);
+            $parameters = array("[~a, ~a]", $params);
 
         } elseif ($functionName === 'info') {
 

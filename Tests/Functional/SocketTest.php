@@ -32,9 +32,6 @@ class SocketTest extends AbstractWebTestCase
 
     /**
      * @large
-     * @group test
-     *
-     * @return [type] [description]
      */
     public function testSocketClientOnSingleData()
     {
@@ -51,9 +48,6 @@ class SocketTest extends AbstractWebTestCase
 
     /**
      * @large
-     * @group testing
-     *
-     * @return [type] [description]
      */
     public function testSocketClientOnComplexData()
     {
