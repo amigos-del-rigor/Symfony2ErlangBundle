@@ -6,7 +6,7 @@ Class NoopEncoder implements EncoderInterface
 {
     public function encode(array $data, $type = null)
     {
-        return $data;
+        return array_pop($data);
     }
 
     public function decode($data, $type = 'array')

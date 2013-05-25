@@ -35,7 +35,6 @@ abstract class AbstractWebTestCase extends WebTestCase
     public function tearDown()
     {
         $this->client = null;
-
         parent::tearDown();
     }
 }

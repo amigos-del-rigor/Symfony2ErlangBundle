@@ -20,16 +20,21 @@ class Socket implements ChannelInterface
         $this->encoder = $encoder;
     }
 
-    public function call($resource, $data, $params = null) {
+    public function call($resource, $data = array(), $params = array()) {
 
         if(!$this->socket) {
             $this->openChannel();
         }
 
-        $status = socket_sendto($this->socket, $resource, strlen($resource), MSG_EOF, $this->host, $this->port);
+        if (!is_array($resource)) {
+            $resource = array($resource);
+        }
+        $resource = array_merge($resource, $data, $params);
+        $input = $this->encoder->encode($resource);
+        $status = socket_sendto($this->socket, $input, strlen($input), MSG_EOF, $this->host, $this->port);
 
         $output = '';
-        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, array("sec"=>0, "usec"=>10));
+        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, array("sec"=>0, "usec"=>50));
         while ($status = socket_read($this->socket, $this->bufferLenght))
         {
             $output .= $status;

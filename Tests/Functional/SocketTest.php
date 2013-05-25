@@ -13,34 +13,74 @@ class SocketTest extends AbstractWebTestCase
     /**
      * @var server port
      */
-    protected $port = 10020;
+    protected $port = 10000;
 
     /**
      * @var Process
      */
     protected $process;
 
+    protected $socketClient;
 
     public function setUp()
     {
-        //$this->startServer();
+        parent::setUp();
+        $this->startServer();
+        sleep(1);
+        $this->socketClient = $this->getContainer()->get('adr_symfony2erlang.channel.manager')->getChannel('socket_node0');
     }
 
-    public function testSocketClient()
+    /**
+     * @large
+     * @group test
+     *
+     * @return [type] [description]
+     */
+    public function testSocketClientOnSingleData()
     {
-        // $socketClient = $this->getContainer()->get('adr_symfony2erlang.channel.manager')->getChannel('socket_node0');
+        for ($i=0; $i < 1000; $i++) {
+            $input = sprintf('sending message %s', $i);
+            $response =$this->socketClient->call($input);
+            $this->assertInternalType('array', $response);
+            $message = array_pop($response);
+            $this->assertContains($input, $message);
+        }
 
-        // $response =$socketClient->call('nextMessage', array());
-        // $this->assertContains("nextMessage", $response);
-        // // $socketServer = new SocketServer($socketClient->getPort());
-        // // $socketServer->doOnce();
+        $this->socketClient->closeChannel();
+    }
 
+    /**
+     * @large
+     * @group testing
+     *
+     * @return [type] [description]
+     */
+    public function testSocketClientOnComplexData()
+    {
+        $resource = array(
+            'module'=> 'module',
+            'function' => 'function'
+        );
 
-        // // $content = $socketClient->call(array(), null);
-        // // var_dump($content);
-        // // $socketServer->closeSocket();
+        for ($i=0; $i < 100; $i++) {
+            $message = sprintf('sending message %s', $i);
+            $data = array('data' => $message);
+            $parameters = array('parameters' => $i);
+            $response =$this->socketClient->call($resource, $data, $parameters);
 
-        $this->assertTrue(true);
+            $this->assertInternalType('array', $response);
+            $this->assertArrayHasKey('module', $response);
+            $this->assertArrayHasKey('function', $response);
+            $this->assertArrayHasKey('data', $response);
+            $this->assertArrayHasKey('parameters', $response);
+
+            $this->assertEquals('module', $response['module']);
+            $this->assertEquals('function', $response['function']);
+            $this->assertEquals($message, $response['data']);
+            $this->assertEquals($i, $response['parameters']);
+        }
+
+        $this->socketClient->closeChannel();
     }
 
     /**
@@ -72,5 +112,7 @@ class SocketTest extends AbstractWebTestCase
         if ($this->process) {
             $this->process->stop();
         }
+
+        parent::tearDown();
     }
 }

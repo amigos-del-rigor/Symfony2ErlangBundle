@@ -26,7 +26,7 @@ class SocketServer
             $spawn = socket_accept($socket) or die("Could not accept incoming connection\n");
 
             while(true) {
-                $input = socket_read($spawn, 30) or die("Could not read input\n");
+                $input = socket_read($spawn, 2048) or die("Could not read input\n");
                 socket_write($spawn, $input, strlen ($input)) or die("Could not write output\n");
             }
 
