@@ -28,7 +28,7 @@ abstract class SocketServerProcess extends \PHPUnit_Framework_TestCase
         $this->process->start();
 
         if (!$this->process->isRunning()) {
-            $this->fail('Could not start webserver');
+            $this->fail('Could not start socket server');
         }
     }
 

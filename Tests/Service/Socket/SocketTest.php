@@ -21,21 +21,6 @@ class SocketTest extends SocketServerProcess
      */
     protected $port = 10015;
 
-    // public function testBasicConnectionToSocketServer()
-    // {
-    //     $this->startServer();
-    //     $process = new Process(sprintf('telnet %s %s', $this->address, $this->port));
-    //     $process->start();
-
-    //     $process->wait(function ($type, $buffer) {
-    //         $this->buffer .=$buffer;
-    //     });
-
-    //     $this->assertContains(sprintf("Connected to %s", $this->address), $this->buffer);
-
-    //     $this->stopServer();
-    // }
-
     public function setUp()
     {
         $this->startServer($this->host, $this->port);

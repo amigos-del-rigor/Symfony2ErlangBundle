@@ -15,8 +15,6 @@ class SocketServer
 
     public function start()
     {
-        // $host = '127.0.0.1';
-        // $port = '10003';
         // create socket
         $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");
         $result = socket_bind($socket, $this->host, $this->port) or die("Could not bind to socket\n");
@@ -29,9 +27,7 @@ class SocketServer
 
             while(true) {
                 $input = socket_read($spawn, 30) or die("Could not read input\n");
-
                 socket_write($spawn, $input, strlen ($input)) or die("Could not write output\n");
-
             }
 
             socket_close($spawn);

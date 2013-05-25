@@ -43,9 +43,20 @@ class Socket implements ChannelInterface
     {
         $this->socket = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
 
-        if (!socket_connect($this->socket, $this->host, $this->port)) {
-            throw new \Exception(sprintf('Connection  %s failure, on Socket Server Node: %s:%s', $this->channelName, $this->host, $this->port ));
+        try {
+            $this->connect();
+        } catch (\Exception $e) {
+            //fix to avoid connection_refused at first try
+            sleep(1);
+            if (!$this->connect()) {
+                throw new \Exception(sprintf('Connection  %s failure, on Socket Server Node: %s:%s. Failed Reason: %s', $this->channelName, $this->host, $this->port , socket_strerror(socket_last_error())));
+            }
         }
+    }
+
+    protected function connect()
+    {
+        return socket_connect($this->socket, $this->host, $this->port);
     }
 
     public function closeChannel()
