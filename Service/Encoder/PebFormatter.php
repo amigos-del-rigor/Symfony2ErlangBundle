@@ -4,6 +4,14 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Service\Encoder;
 
 Class PebFormatter
 {
+    /**
+     * Format array structure to acomplish
+     * peb method specifications
+     *
+     * @param string $functionName Ets Method
+     * @param  array  $params
+     * @return array (format Structure, parameters)
+     */
     public function getArgumentsStructure($functionName, array $params)
     {
         $validFunctionNames = array('insert', 'lookup', 'delete', 'info');
