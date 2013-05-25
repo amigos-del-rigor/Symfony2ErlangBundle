@@ -3,6 +3,7 @@
 namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Encoder;
 
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebEncoder;
+use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebFormatter;
 
 class PebTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +11,8 @@ class PebTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->encoder = new PebEncoder();
+        $pebFormatter = new PebFormatter();
+        $this->encoder = new PebEncoder($pebFormatter);
     }
 
 
@@ -98,24 +100,5 @@ class PebTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($decodedData));
         $this->assertEquals($params[0], $decodedData[0]);
         $this->assertEquals($params[1], $decodedData[1]);
-    }
-    /**
-     * @group okis
-     * @dataProvider getArguments
-     */
-    public function testGetArgumentsStructure($type, $result)
-    {
-        $data = $this->encoder->getArgumentsStructure($type, array());
-        $this->assertEquals($data, array($result, array()));
-    }
-
-    public function getArguments()
-    {
-        return array(
-            array('insert', '[~a, {~a, ~s}]'),
-            array('lookup', '[~a, ~a]'),
-            array('info', '[~a]'),
-            array('delete', '[~a, ~a]'),
-        );
     }
 }

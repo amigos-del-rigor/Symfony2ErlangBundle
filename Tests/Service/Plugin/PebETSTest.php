@@ -4,6 +4,7 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Plugin;
 
 use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\Peb;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebEncoder;
+use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebFormatter;
 use Symfony\Component\Process\Process;
 
 class PebETSTest extends \PHPUnit_Framework_TestCase
@@ -18,7 +19,8 @@ class PebETSTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $encoder = new PebEncoder();
+        $pebFormatter = new PebFormatter();
+        $encoder = new PebEncoder($pebFormatter);
         $this->peb = new Peb($encoder);
         $this->peb->setNode('node0@127.0.0.1');
         $this->peb->setCookie('abc');

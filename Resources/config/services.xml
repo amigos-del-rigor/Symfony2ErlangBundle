@@ -7,7 +7,10 @@
     <services>
 
         <!-- Encoders -->
-        <service id="adr_symfony2_erlang.channel.peb.encoder" class="ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebEncoder" />
+        <service id="adr_symfony2_erlang.channel.peb.formatter" class="ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebFormatter" />
+        <service id="adr_symfony2_erlang.channel.peb.encoder" class="ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebEncoder">
+            <argument type="service" id="adr_symfony2_erlang.channel.peb.formatter" />
+        </service>
         <service id="adr_symfony2_erlang.channel.json.encoder" class="ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\JsonEncoder" />
 
         <!-- Channels -->
