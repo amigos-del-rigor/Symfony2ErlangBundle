@@ -36,47 +36,24 @@ class Peb implements ChannelInterface
         if(!$this->link) {
             $this->openChannel();
         }
+        $data = array(
+            'functionName' => $functionName,
+            'params' => $params
+        );
 
-        //@TODO: Provisional structure !!!!!!
-        if ($functionName === 'insert') {
-
-            $parameters = array("[~a, {~a, ~s}]", $params);
-
-        } elseif ($functionName === 'lookup') {
-
-            $parameters = array("[~a, ~a]", $params);
-
-        } elseif ($functionName === 'new') {
-
-            $parameters = array("[~a, [~a, ~a, ~a]]", $params);
-
-        } elseif ($functionName === 'delete') {
-
-            $parameters = array("[~a, ~a]", $params);
-
-        } elseif ($functionName === 'info') {
-
-            $parameters = array("[~a]", $params);
-        }
-
-        $message = $this->encoder->encode($parameters, 'encode');
+        $message = $this->encoder->encode($data);
 
         $result = peb_rpc($moduleName, $functionName, $message, $this->link);
 
         return $this->encoder->decode($result);
     }
 
-  protected function repeatFormat($format, $arr)
-  {
-    return implode(', ', array_fill(0, count($arr), $format));
-  }
     /**
      * Open Channel connection to erlang Node
      *
      * $this->link gets connection when success
      */
     protected function openChannel() {
-        // $connectionParams = ($this->environment === 'linux') ? array($this->node, $this->cookie) : array($this->node, $this->cookie, $this->timeout);
 
         $this->link = $this->getConnection();
 

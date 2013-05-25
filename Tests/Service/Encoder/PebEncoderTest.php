@@ -13,10 +13,16 @@ class PebTest extends \PHPUnit_Framework_TestCase
         $this->encoder = new PebEncoder();
     }
 
+
     public function testVEncodeAndDecodeArray()
     {
+        $r = new \ReflectionObject($this->encoder);
+        $m = $r->getMethod('rawEncode');
+        $m->setAccessible(true);
+
+
         $data = array("[~s]" , 'message');
-        $encodeData = $this->encoder->encode($data, 'vencode');
+        $encodeData = $m->invoke($this->encoder, $data, 'vencode');
         $decodedData = $this->encoder->decode($encodeData, 'vencode');
 
         $this->assertTrue(is_array($decodedData));
@@ -25,8 +31,12 @@ class PebTest extends \PHPUnit_Framework_TestCase
 
     public function testEncodeAndDecodeArray()
     {
+        $r = new \ReflectionObject($this->encoder);
+        $m = $r->getMethod('rawEncode');
+        $m->setAccessible(true);
         $data = array("[~s]" , 'message');
-        $encodeData = $this->encoder->encode($data);
+        $encodeData = $m->invoke($this->encoder, $data, 'encode');
+
         $decodedData = $this->encoder->decode($encodeData);
 
         $this->assertTrue(is_array($decodedData));
@@ -35,18 +45,33 @@ class PebTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage Bad formated data
+     * @expectedExceptionMessage Bad formated argument and parameters
+     */
+    public function testFailRawEncodeBadParameters()
+    {
+        $r = new \ReflectionObject($this->encoder);
+        $m = $r->getMethod('rawEncode');
+        $m->setAccessible(true);
+        $encodeData = $m->invoke($this->encoder, array(), 'encode');
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Bad formated data Structure
      */
     public function testFailEncodeBadParameters()
     {
         $outputChannel = $this->encoder->encode(array());
     }
 
-    public function testEncodeAndDecodeMultiData()
+    public function testRawEncodeAndDecodeMultiData()
     {
         $params = array('test', 'message');
         $data = array("[~a,~a]", $params);
-        $encodeData = $this->encoder->encode($data);
+        $r = new \ReflectionObject($this->encoder);
+        $m = $r->getMethod('rawEncode');
+        $m->setAccessible(true);
+        $encodeData = $m->invoke($this->encoder, $data, 'encode');
         $decodedData = $this->encoder->decode($encodeData);
 
         $this->assertTrue(is_array($decodedData));
@@ -54,14 +79,43 @@ class PebTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($params[1], $decodedData[1]);
     }
 
-    //@TODO: HAS TO DOO WIHT PEB_RPC FAILURE
-    // response Violacion de segmento
-    //
-    // public function testEncodeAndDecodeTupleData()
-    // {
-    //     $params = array('test', 'message');
-    //     $data = array('keys' => "[~a, {~a, ~s}]", 'params' => $params);
-    //     $encodeData = $this->encoder->encode($data);
-    //     $decodedData = $this->encoder->decode($encodeData);
-    // }
+    /**
+     *
+     * @group testoki
+     */
+    public function testEncodeAndDecodeMultiData()
+    {
+        $params = array('test', 'message');
+        $data = array("[~a,~a]", $params);
+
+        $data = array(
+            'functionName' => 'lookup',
+            'params' => $params
+        );
+
+        $encodeData = $this->encoder->encode($data);
+        $decodedData = $this->encoder->decode($encodeData);
+        $this->assertTrue(is_array($decodedData));
+        $this->assertEquals($params[0], $decodedData[0]);
+        $this->assertEquals($params[1], $decodedData[1]);
+    }
+    /**
+     * @group okis
+     * @dataProvider getArguments
+     */
+    public function testGetArgumentsStructure($type, $result)
+    {
+        $data = $this->encoder->getArgumentsStructure($type, array());
+        $this->assertEquals($data, array($result, array()));
+    }
+
+    public function getArguments()
+    {
+        return array(
+            array('insert', '[~a, {~a, ~s}]'),
+            array('lookup', '[~a, ~a]'),
+            array('info', '[~a]'),
+            array('delete', '[~a, ~a]'),
+        );
+    }
 }
