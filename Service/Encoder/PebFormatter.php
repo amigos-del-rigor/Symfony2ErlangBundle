@@ -14,7 +14,7 @@ Class PebFormatter
      */
     public function getArgumentsStructure($functionName, array $params)
     {
-        $validFunctionNames = array('insert', 'lookup', 'delete', 'info');
+        $validFunctionNames = array('insert', 'lookup', 'delete', 'info', 'get_pid_from_id', 'set', 'get', 'setPidList');
         if (!in_array($functionName, $validFunctionNames)) {
             throw new \Exception('Invalid method!');
         }
@@ -39,6 +39,26 @@ Class PebFormatter
     protected function info(array $params)
     {
         return array("[~a]", $params);
+    }
+
+    protected function get_pid_from_id(array $params)
+    {
+        return array("[~s]", $params);
+    }
+
+    protected function set(array $params)
+    {
+        return array("[~P, ~s, ~s]", $params);
+    }
+
+    protected function get(array $params)
+    {
+        return array("[~P, ~s]", $params);
+    }
+
+    protected function setPidList(array $params)
+    {
+        return array("[~s, ~s, ~s]", $params);
     }
 
 }

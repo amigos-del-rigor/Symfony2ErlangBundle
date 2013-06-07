@@ -43,7 +43,7 @@ class Peb implements ChannelInterface
 
         $message = $this->encoder->encode($data);
 
-        $result = peb_rpc($moduleName, $functionName, $message, $this->link);
+        $result = $this->rpcCall($moduleName, $functionName, $message);
 
         return $this->encoder->decode($result);
     }
@@ -102,5 +102,15 @@ class Peb implements ChannelInterface
     public function setTimeout($timeout)
     {
         $this->timeout = $timeout;
+    }
+
+    protected function rpcCall($moduleName, $functionName, $message)
+    {
+         $result = peb_rpc($moduleName, $functionName, $message, $this->link);
+         if ($result === false) {
+            throw new \Exception('Bad RPC response, peb_rpc returned false');
+         }
+
+         return $result;
     }
 }

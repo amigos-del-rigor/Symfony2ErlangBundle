@@ -26,6 +26,14 @@ Class PebEncoder implements EncoderInterface
         return $this->rawEncode($data, $type);
     }
 
+    /**
+     * Encode from builded parameters
+     *
+     * @param  array  $data [0]=>[***]", [1]=> $params
+     * @param string $type variant
+     *
+     * @return Erlang Term
+     */
     protected function rawEncode(array $data, $type)
     {
         if (!isset($data[0]) || !isset($data[1])){
