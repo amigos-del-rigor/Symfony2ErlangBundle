@@ -24,10 +24,7 @@ class ADRSymfony2ErlangExtension extends Extension
 
         $configuration = new Configuration();
 
-        //@TODO: Waiting COnfiguration validation
-        // $config = $this->processConfiguration($configuration, $configs);
-        $config = $configs[0];
-
+        $config = $this->processConfiguration($configuration, $configs);
         $container->setParameter('adr_symfony2_erlang.configured.channels', $config);
 
         //@TODO
