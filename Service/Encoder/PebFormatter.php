@@ -4,6 +4,15 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Service\Encoder;
 
 Class PebFormatter
 {
+    const insert            = "[~a, {~a, ~s}]";
+    const lookup            = "[~a, ~a]";
+    const delete            = "[~a, ~a]";
+    const info              = "[~a]";
+    const get_pid_from_id   = "[~s]";
+    const set               = "[~P, ~s, ~s]";
+    const get               = "[~P, ~s]";
+    const setPidList        = "[~s, ~s, ~s]";
+
     /**
      * Format array structure to acomplish
      * peb method specifications
@@ -18,47 +27,13 @@ Class PebFormatter
         if (!in_array($functionName, $validFunctionNames)) {
             throw new \Exception('Invalid method!');
         }
-        return $this->$functionName($params);
+        return array(constant(sprintf('self::%s', $functionName)), $params);
     }
 
-    protected function insert(array $params)
+    protected function getDefinedConstants()
     {
-         return array("[~a, {~a, ~s}]", $params);
-    }
+        $reflClass = new \ReflectionObject($this);
 
-    protected function lookup(array $params)
-    {
-        return array("[~a, ~a]", $params);
+        return array_keys($reflClass->getConstants());
     }
-
-    protected function delete(array $params)
-    {
-        return array("[~a, ~a]", $params);
-    }
-
-    protected function info(array $params)
-    {
-        return array("[~a]", $params);
-    }
-
-    protected function get_pid_from_id(array $params)
-    {
-        return array("[~s]", $params);
-    }
-
-    protected function set(array $params)
-    {
-        return array("[~P, ~s, ~s]", $params);
-    }
-
-    protected function get(array $params)
-    {
-        return array("[~P, ~s]", $params);
-    }
-
-    protected function setPidList(array $params)
-    {
-        return array("[~s, ~s, ~s]", $params);
-    }
-
 }
