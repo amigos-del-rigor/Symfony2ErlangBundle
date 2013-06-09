@@ -23,8 +23,7 @@ Class PebFormatter
      */
     public function getArgumentsStructure($functionName, array $params)
     {
-        $validFunctionNames = array('insert', 'lookup', 'delete', 'info', 'get_pid_from_id', 'set', 'get', 'setPidList');
-        if (!in_array($functionName, $validFunctionNames)) {
+        if (!in_array($functionName, $this->getDefinedConstants())) {
             throw new \Exception('Invalid method!');
         }
         return array(constant(sprintf('self::%s', $functionName)), $params);
