@@ -27,12 +27,20 @@ class ADRSymfony2ErlangExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $container->setParameter('adr_symfony2_erlang.configured.channels', $config);
 
-        //@TODO
-        $container->setAlias('adr_symfony2_erlang.api.rest.handler', 'adr_symfony2_erlang.api.rest.handler.noop');
+        $container->setAlias(
+            'adr_symfony2_erlang.api.rest.handler',
+            'adr_symfony2_erlang.api.rest.handler.noop'
+        );
+
+        $container->setAlias(
+            'adr_symfony2_erlang.channel.peb.formatter',
+            'adr_symfony2_erlang.channel.peb.formatter.base'
+        );
 
         // Add service classes to the class cache for performance.
         $this->addClassesToCompile(array(
-            $container->findDefinition('adr_symfony2_erlang.api.rest.handler')->getClass()
+            $container->findDefinition('adr_symfony2_erlang.api.rest.handler')->getClass(),
+            $container->findDefinition('adr_symfony2_erlang.channel.peb.formatter')->getClass()
         ));
     }
 }
