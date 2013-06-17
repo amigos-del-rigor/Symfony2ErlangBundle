@@ -10,7 +10,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Yaml;
-use Mockery;
 
 class ADRSymfony2ErlangExtensionTest extends \PHPUnit_Framework_TestCase
 {

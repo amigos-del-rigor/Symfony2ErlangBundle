@@ -122,6 +122,9 @@ class Rest implements ChannelInterface
 
     protected function getMethod()
     {
+        if (!isset($this->resource['method'])) {
+            throw new \Exception("Bad Method Resource Structure", 1);
+        }
         return strtolower($this->resource['method']);
     }
 
