@@ -5,7 +5,7 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Service;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\ChannelInterface;
 
 /**
- * Example ETS easy implementation
+ * ETS Example to show easy implementation
  */
 Class Ets
 {

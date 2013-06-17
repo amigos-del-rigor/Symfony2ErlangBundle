@@ -12,6 +12,7 @@ abstract class AbstractHandler
     {
         $this->request = $request;
         // call_user_func($this->getMethod());
+        // @TODO: check first if callable, then call_user....
         $method = $this->getMethod();
 
         return $this->$method();

@@ -6,21 +6,55 @@ use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\EncoderInterface;
 
 class Peb implements ChannelInterface
 {
+    /**
+     * Channel Name Definition
+     * @var string
+     */
     protected $channelName;
+
+    /**
+     * Node Url
+     * @var string
+     */
     protected $node;
+
+    /**
+     * Security passPhrase Cookie
+     * @var string
+     */
     protected $cookie;
+
+    /**
+     * timeout definition
+     * @var int
+     */
     protected $tiemout;
+
+    /**
+     * @var EncoderInterface
+     */
     protected $encoder;
+
+    /**
+     * Connection link
+     * @var boolean|pebConnection
+     */
     protected $link = false;
+
+    /**
+     * Server Environment
+     * @var string
+     */
     protected $environment = 'linux';
 
     public function __construct(EncoderInterface $encoder)
     {
         $this->encoder = $encoder;
 
-        // OS
-        $os = php_uname('s');
-        if($os == "Darwin") $this->environment = 'mac';
+        // Used to solve Environment
+        if(php_uname('s') == "Darwin") {
+            $this->environment = 'mac';
+        }
     }
 
     /**
@@ -62,6 +96,31 @@ class Peb implements ChannelInterface
         }
     }
 
+    /**
+     * Makes RPC call on erlang node, in a transparent way
+     *
+     * @param string $moduleName
+     * @param string $functionName
+     * @param string $message
+     *
+     * @return erlang Term
+     */
+    protected function rpcCall($moduleName, $functionName, $message)
+    {
+         $result = peb_rpc($moduleName, $functionName, $message, $this->link);
+         if ($result === false) {
+            throw new \Exception('Bad RPC response, peb_rpc returned false');
+         }
+
+         return $result;
+    }
+
+    /**
+     * Actually PEB extension throws segment violation fault on linux
+     * environments when timeout parameter is specified
+     *
+     * @return PebConnection Link
+     */
     protected function getConnection()
     {
         if($this->environment === 'linux') {
@@ -78,6 +137,8 @@ class Peb implements ChannelInterface
     {
         peb_close($this->link);
     }
+
+    /** Channel definition */
 
     public function setChannelName($channelName)
     {
@@ -104,13 +165,4 @@ class Peb implements ChannelInterface
         $this->timeout = $timeout;
     }
 
-    protected function rpcCall($moduleName, $functionName, $message)
-    {
-         $result = peb_rpc($moduleName, $functionName, $message, $this->link);
-         if ($result === false) {
-            throw new \Exception('Bad RPC response, peb_rpc returned false');
-         }
-
-         return $result;
-    }
 }

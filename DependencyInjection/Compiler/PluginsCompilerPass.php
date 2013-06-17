@@ -37,17 +37,17 @@ class PluginsCompilerPass implements CompilerPassInterface
     protected function defineChannelsConfiguration(ContainerBuilder $container, array $config)
     {
         $this->processTagedPlugins($container);
-
         $definition = new Definition('ADR\Bundle\Symfony2ErlangBundle\Service\ChannelManager');
 
         if (!isset($config['channels'])) {
             throw new \Exception("Configure adr_symfony2_erlang channel on config.yml", 1);
-
         }
 
         foreach ($config['channels'] as $name => $parameters) {
 
             $pluginId = $this->getPlugin($parameters['type']);
+
+            //@TODO: As new Reference ID
             $channelDefinition = clone $container->getDefinition($pluginId);
             $channelDefinition->addMethodCall('setChannelName', array($name));
 

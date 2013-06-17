@@ -1,8 +1,12 @@
 <?php
 
 namespace ADR\Bundle\Symfony2ErlangBundle\Service;
+
 use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\ChannelInterface;
 
+/**
+ * Abstraction Class to access erlang Channels
+ */
 Class ChannelManager
 {
     /**
@@ -35,10 +39,9 @@ Class ChannelManager
     }
 
     /**
-     *
      * @param ChannelInterface $channel
-     * @param  [type] $id      plugin $id
-     * @return [type]          [description]
+     * @param  int $id      plugin $id
+     * @return string
      */
     protected function getChannelName(ChannelInterface $channel, $id = null)
     {

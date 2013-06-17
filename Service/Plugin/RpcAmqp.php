@@ -9,19 +9,66 @@ use PhpAmqpLib\Message\AMQPMessage;
 class RpcAmqp implements ChannelInterface
 {
     /**
-     * RPCAMQP
-     *
+     * Channel Name Definition
      * @var string
      */
     protected $channelName;
+
+    /**
+     * @var EncoderInterface
+     */
+    protected $encoder;
+
+    /**
+     * Host Url
+     * @var string
+     */
     protected $host;
+
+    /**
+     * Destination Port
+     * @var integer
+     */
     protected $port;
+
+    /**
+     * User Name
+     * @var string
+     */
     protected $user;
+
+    /**
+     * Auth Password
+     * @var string
+     */
     protected $password;
+
+    /**
+     * Connection Link
+     * @var AMQPConnection
+     */
     protected $link;
+
+    /**
+     * AMQChannel
+     * @var
+     */
     protected $amqpChannel;
+
+    /**
+     * AMQ CallBack Queue
+     * @var
+     */
     protected $callbackQueue;
+
+    /**
+     * @var [type]
+     */
     protected $response;
+
+    /**
+     * @var int
+     */
     protected $corrId;
 
     public function __construct(EncoderInterface $encoder)
@@ -29,6 +76,14 @@ class RpcAmqp implements ChannelInterface
         $this->encoder = $encoder;
     }
 
+    /**
+     * Handle Call
+     * @param string $moduleName
+     * @param string $functionName
+     * @param array $params
+     *
+     * @return array
+     */
     public function call($moduleName, $functionName, $params) {
         if(!$this->link) {
             $this->openChannel();
@@ -51,7 +106,8 @@ class RpcAmqp implements ChannelInterface
         return $this->encoder->decode($this->response);
     }
 
-    protected function openChannel() {
+    protected function openChannel()
+    {
 
         $this->link = new AMQPConnection(
             $this->host, $this->port, $this->user, $this->password
@@ -61,14 +117,18 @@ class RpcAmqp implements ChannelInterface
         list($this->callbackQueue, ,) = $this->amqpChannel->queue_declare("", false, false, true, false);
         $this->amqpChannel->basic_consume(
             $this->callbackQueue, '', false, false, false, false,
-            array($this, 'on_response'));
+            array($this, 'on_response')
+        );
     }
 
-    public function on_response($rep) {
+    public function on_response($rep)
+    {
         if($rep->get('correlation_id') == $this->corrId) {
             $this->response = $rep->body;
         }
     }
+
+    /** Channel definition */
 
     public function setChannelName($channelName)
     {

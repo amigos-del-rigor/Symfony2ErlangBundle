@@ -7,14 +7,36 @@ use Guzzle\Http\Client;
 
 class Rest implements ChannelInterface
 {
+    /**
+     * Channel Name Definition
+     * @var string
+     */
     protected $channelName;
+
+    /**
+     * Host Url
+     * @var string
+     */
     protected $host;
+
+    /**
+     * Destination Port
+     * @var integer
+     */
     protected $port;
+
+    /**
+     * @var EncoderInterface
+     */
     protected $encoder;
+
+    /**
+     * Destination Resource
+     * @var [type]
+     */
     protected $resource;
 
     /**
-     * http://guzzlephp.org/
      * @param EncoderInterface $encoder [description]
      */
     public function __construct(EncoderInterface $encoder)
@@ -23,13 +45,14 @@ class Rest implements ChannelInterface
     }
 
     /**
-     * @TODO: Maybe ChannelInterface is too rigid
      * Implemented to pass Json encode data as a field on
      * post request
-     * @param  [type] $resource [description]
-     * @param  [type] $data     [description]
-     * @param  [type] $params   [description]
-     * @return [type]           [description]
+     *
+     * @param string $resource
+     * @param string $data
+     * @param array $params
+     *
+     * @return array
      */
     public function call($resource, $data = array(), $params = null)
     {
@@ -40,6 +63,58 @@ class Rest implements ChannelInterface
         $response = $this->$method();
 
         return $this->encoder->decode($response->getBody());
+    }
+
+    /**
+     * Handle Get Call
+     *
+     * @return Response
+     */
+    protected function get()
+    {
+        $client = new Client($this->host);
+        $request = $client->get($this->getRequestPath());
+
+        return $request->send();
+    }
+
+    /**
+     * Handle POST Call
+     *
+     * @return Response
+     */
+    protected function post()
+    {
+        $client = new Client($this->host);
+        $request = $client->post($this->getRequestPath(), null, $this->data);
+
+        return $request->send();
+    }
+
+    /**
+     * Handle PUT Call
+     *
+     * @return Response
+     */
+    protected function put()
+    {
+        $client = new Client($this->host);
+        $request = $client->put($this->getRequestPath(), null, 'this is the body');
+
+        return $request->send();
+    }
+
+    /**
+     * Handle DELETE Call
+     *
+     * @return Response
+     */
+    protected function delete()
+    {
+        $client = new Client($this->host);
+        $request = $client->delete($this->getRequestPath());
+
+        return $request->send();
     }
 
     protected function getMethod()
@@ -55,38 +130,7 @@ class Rest implements ChannelInterface
                 $this->resource['key'];
     }
 
-    protected function get()
-    {
-        $client = new Client($this->host);
-        $request = $client->get($this->getRequestPath());
-
-        return $request->send();
-    }
-
-    protected function post()
-    {
-        $client = new Client($this->host);
-
-        $request = $client->post($this->getRequestPath(), null, $this->data);
-
-        return $request->send();
-    }
-
-    protected function put()
-    {
-        $client = new Client($this->host);
-        $request = $client->put($this->getRequestPath(), null, 'this is the body');
-
-        return $request->send();
-    }
-
-    protected function delete()
-    {
-        $client = new Client($this->host);
-        $request = $client->delete($this->getRequestPath());
-
-        return $request->send();
-    }
+    /** Channel definition */
 
     public function getChannelName()
     {

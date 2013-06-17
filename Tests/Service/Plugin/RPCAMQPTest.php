@@ -27,7 +27,5 @@ class RpcAmqpTest extends \PHPUnit_Framework_TestCase {
     {
         $result = $this->rpcAmqp->call('mymodule', 'sum', array(1, 2, 3, 4, 5));
         $this->assertEquals($result, 15);
-
-        $this->assertTrue(true);
     }
 }

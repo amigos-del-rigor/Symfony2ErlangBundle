@@ -7,11 +7,37 @@ use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\EncoderInterface;
 
 class Socket implements ChannelInterface
 {
+    /**
+     * Channel Name Definition
+     * @var string
+     */
     protected $channelName;
-    protected $host;
-    protected $port;
+
+    /**
+     * @var EncoderInterface
+     */
     protected $encoder;
+
+    /**
+     * Host Url
+     * @var string
+     */
+    protected $host;
+
+    /**
+     * Destination Port
+     * @var integer
+     */
+    protected $port;
+
+    /**
+     * @var integer
+     */
     protected $bufferLenght = 2048;
+
+    /**
+     * Connection Socket
+     */
     protected $socket;
 
 
@@ -20,6 +46,16 @@ class Socket implements ChannelInterface
         $this->encoder = $encoder;
     }
 
+    /**
+     * Implemented by default to pass Json encode data as a field on
+     * post request
+     *
+     * @param string $resource
+     * @param string $data
+     * @param array $params
+     *
+     * @return array
+     */
     public function call($resource, $data = array(), $params = array()) {
 
         if(!$this->socket) {
@@ -44,6 +80,11 @@ class Socket implements ChannelInterface
 
     }
 
+    /**
+     * Open Channel connection to Socket Server
+     *
+     * $this->socket gets connection when success
+     */
     public function openChannel()
     {
         $this->socket = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
@@ -54,20 +95,34 @@ class Socket implements ChannelInterface
             //fix to avoid connection_refused at first try
             sleep(1);
             if (!$this->connect()) {
-                throw new \Exception(sprintf('Connection  %s failure, on Socket Server Node: %s:%s. Failed Reason: %s', $this->channelName, $this->host, $this->port , socket_strerror(socket_last_error())));
+                throw new \Exception(
+                    sprintf('Connection  %s failure, on Socket Server Node: %s:%s. Failed Reason: %s',
+                        $this->channelName, $this->host, $this->port , socket_strerror(socket_last_error())
+                    )
+                );
             }
         }
     }
 
+    /**
+     * Socket Connenction
+     *
+     * @return Socket Resource
+     */
     protected function connect()
     {
         return socket_connect($this->socket, $this->host, $this->port);
     }
 
+    /**
+     * Close socket connection
+     */
     public function closeChannel()
     {
          socket_close($this->socket);
     }
+
+    /** Channel definition */
 
     public function getChannelName()
     {
