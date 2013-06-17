@@ -8,6 +8,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 class ADRSymfony2ErlangExtension extends Extension
 {
@@ -27,15 +29,28 @@ class ADRSymfony2ErlangExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $container->setParameter('adr_symfony2_erlang.configured.channels', $config);
 
-        $container->setAlias(
-            'adr_symfony2_erlang.api.rest.handler',
-            'adr_symfony2_erlang.api.rest.handler.noop'
-        );
+        //service alias processing
+        if (!$container->hasParameter('adr_symfony2_erlang.services')) {
+            $container->setParameter(
+                'adr_symfony2_erlang.services',
+                array(
+                    'api.rest.handler' => 'adr_symfony2_erlang.api.rest.handler.noop',
+                    'channel.peb.formatter' => 'adr_symfony2_erlang.channel.peb.formatter.base'
+                )
+            );
+        }
 
-        $container->setAlias(
-            'adr_symfony2_erlang.channel.peb.formatter',
-            'adr_symfony2_erlang.channel.peb.formatter.base'
-        );
+        $config = $container->getParameter('adr_symfony2_erlang.services');
+
+        foreach ($config as $id => $serviceId) {
+            try {
+                $container->findDefinition($serviceId);
+            } catch(InvalidArgumentException $e) {
+                throw new LogicException(sprintf('The service (%s) specified for (%s) is not defined.', $serviceId, $id));
+            }
+
+            $container->setAlias('adr_symfony2_erlang.' . $id, $serviceId);
+        }
 
         // Add service classes to the class cache for performance.
         $this->addClassesToCompile(array(
