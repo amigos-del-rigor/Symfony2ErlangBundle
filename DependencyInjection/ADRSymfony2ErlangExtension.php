@@ -34,8 +34,7 @@ class ADRSymfony2ErlangExtension extends Extension
             $container->setParameter(
                 'adr_symfony2_erlang.services',
                 array(
-                    'api.rest.handler' => 'adr_symfony2_erlang.api.rest.handler.noop',
-                    'channel.peb.formatter' => 'adr_symfony2_erlang.channel.peb.formatter.base'
+                    'api.rest.handler' => 'adr_symfony2_erlang.api.rest.handler.noop'
                 )
             );
         }
@@ -54,8 +53,7 @@ class ADRSymfony2ErlangExtension extends Extension
 
         // Add service classes to the class cache for performance.
         $this->addClassesToCompile(array(
-            $container->findDefinition('adr_symfony2_erlang.api.rest.handler')->getClass(),
-            $container->findDefinition('adr_symfony2_erlang.channel.peb.formatter')->getClass()
+            $container->findDefinition('adr_symfony2_erlang.api.rest.handler')->getClass()
         ));
     }
 }

@@ -2,14 +2,8 @@
 
 namespace ADR\Bundle\Symfony2ErlangBundle\Service\Encoder;
 
-use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebFormatter;
 Class PebEncoder implements EncoderInterface
 {
-    public function __construct(PebFormatter $formater)
-    {
-        $this->formater = $formater;
-    }
-
     /**
      * [encode description]
      * @param  array  $data data[0] keys, data[1] params
@@ -18,12 +12,11 @@ Class PebEncoder implements EncoderInterface
      */
     public function encode(array $data, $type = 'encode')
     {
-        if (!isset($data['functionName']) || !isset($data['params'])) {
+        if (!isset($data['functionName']) || !isset($data['params']) || !isset($data['structure'])) {
             throw new \Exception("Bad formated data Structure");
         }
-        $data = $this->formater->getArgumentsStructure($data['functionName'], $data['params']);
 
-        return $this->rawEncode($data, $type);
+        return $this->rawEncode(array($data['structure'], $data['params']), $type);
     }
 
     /**

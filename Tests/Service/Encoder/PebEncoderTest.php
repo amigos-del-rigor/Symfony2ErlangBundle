@@ -5,22 +5,11 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Tests\Service\Encoder;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebEncoder;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebFormatter;
 
-class PebTest extends \PHPUnit_Framework_TestCase
+class PebEncoderTest extends \PHPUnit_Framework_TestCase
 {
-    protected function getFakePebETSFormatter($params)
-    {
-        $mock = \Mockery::mock('ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebFormatter');
-        $mock->shouldReceive('getArgumentsStructure')
-            ->andReturn(array("[~a, ~a]", $params));
-
-        return $mock;
-    }
-
-
     public function testVEncodeAndDecodeArray()
     {
-        $pebFormatter = $this->getFakePebETSFormatter(array());
-        $encoder = new PebEncoder($pebFormatter);
+        $encoder = new PebEncoder();
 
         $r = new \ReflectionObject($encoder);
         $m = $r->getMethod('rawEncode');
@@ -36,8 +25,7 @@ class PebTest extends \PHPUnit_Framework_TestCase
 
     public function testEncodeAndDecodeArray()
     {
-        $pebFormatter = $this->getFakePebETSFormatter(array());
-        $encoder = new PebEncoder($pebFormatter);
+        $encoder = new PebEncoder();
         $r = new \ReflectionObject($encoder);
         $m = $r->getMethod('rawEncode');
         $m->setAccessible(true);
@@ -57,8 +45,7 @@ class PebTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailRawEncodeBadParameters()
     {
-        $pebFormatter = $this->getFakePebETSFormatter(array());
-        $encoder = new PebEncoder($pebFormatter);
+        $encoder = new PebEncoder();
         $r = new \ReflectionObject($encoder);
         $m = $r->getMethod('rawEncode');
         $m->setAccessible(true);
@@ -72,8 +59,7 @@ class PebTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailEncodeBadParameters()
     {
-        $pebFormatter = $this->getFakePebETSFormatter(array());
-        $encoder = new PebEncoder($pebFormatter);
+        $encoder = new PebEncoder();
         $outputChannel = $encoder->encode(array());
     }
 
@@ -85,8 +71,7 @@ class PebTest extends \PHPUnit_Framework_TestCase
     {
         $params = array('test', 'message');
         $data = array("[~a,~a]", $params);
-        $pebFormatter = $this->getFakePebETSFormatter($data);
-        $encoder = new PebEncoder($pebFormatter);
+        $encoder = new PebEncoder();
         $r = new \ReflectionObject($encoder);
         $m = $r->getMethod('rawEncode');
         $m->setAccessible(true);
@@ -105,20 +90,20 @@ class PebTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncodeAndDecodeMultiData()
     {
-        $pebFormatter = new PebFormatter();
-        $encoder = new PebEncoder($pebFormatter);
-        $params = array('test', 'message');
+        $encoder = new PebEncoder();
+        $params = array("[~a,~a]",array('test', 'message'));
         $data = array("[~a,~a]", $params);
 
         $data = array(
             'functionName' => 'lookup',
-            'params' => $params
+            'params' => $params[1],
+            'structure' => $params[0]
         );
 
         $encodeData = $encoder->encode($data);
         $decodedData = $encoder->decode($encodeData);
         $this->assertTrue(is_array($decodedData));
-        $this->assertEquals($params[0], $decodedData[0]);
-        $this->assertEquals($params[1], $decodedData[1]);
+        $this->assertEquals($params[1][0], $decodedData[0]);
+        $this->assertEquals($params[1][1], $decodedData[1]);
     }
 }
