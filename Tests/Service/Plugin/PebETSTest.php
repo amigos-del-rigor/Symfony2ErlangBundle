@@ -31,6 +31,15 @@ class PebETSTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Bad format params
+     */
+    public function testThrowExceptionOnInvalidParams0()
+    {
+        $this->peb->call('ets', 'fail', array());
+    }
+
+    /**
      * @group oki
      * @return [type] [description]
      */

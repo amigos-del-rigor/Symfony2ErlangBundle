@@ -71,6 +71,11 @@ class Peb implements ChannelInterface
         if(!$this->link) {
             $this->openChannel();
         }
+
+        if (!isset($params[0])||!isset($params[1])) {
+            throw new \Exception("Bad format params", 1);
+
+        }
         $data = array(
             'functionName' => $functionName,
             'structure' => $params[0],
