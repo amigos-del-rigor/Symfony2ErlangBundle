@@ -35,10 +35,16 @@ class ChannelManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function getFakeChannel()
     {
-        $channel =  Mockery::mock('\ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\ChannelInterface'
+        $channel =  Mockery::mock(
+            '\ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\ChannelInterface'
         );
         $channel->shouldReceive('getChannelName')->andReturn('fakeChannel');
 
         return $channel;
+    }
+
+    public function tearDown()
+    {
+        $this->channelManager = null;
     }
 }

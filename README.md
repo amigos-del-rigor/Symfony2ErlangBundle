@@ -68,3 +68,11 @@ Start test:
     phpunit
 
 
+Configuring API REST Handler:
+-----------------------------
+    By default noop handler is set as rest handler alias , if you want to
+    override it just declare on your config.yml:
+
+    adr_symfony2_erlang:
+        services:
+            api.rest.handler: adr_symfony2_erlang.api.rest.handler.noop

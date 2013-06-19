@@ -27,7 +27,11 @@ class ADRSymfony2ErlangContainerTest extends \PHPUnit_Framework_TestCase
         $extension->load(array($config), $this->container);
 
         //solves scope request on testing environment
-        $apiRest = $this->container->getDefinition('adr_symfony2_erlang.api.rest.controller');
+        $apiRest = $this->container->getDefinition(
+            'adr_symfony2_erlang.api.rest.controller'
+        );
+
+        /** downgrade scope request **/
         $apiRest->setScope('container');
         $this->container->setDefinition('request', new Definition('Symfony\Component\HttpFoundation\Request'));
 
@@ -35,20 +39,25 @@ class ADRSymfony2ErlangContainerTest extends \PHPUnit_Framework_TestCase
         $this->container->registerExtension($extension);
         $this->container->addCompilerPass(new PluginsCompilerPass());
         $this->container->compile();
-
     }
 
     public function testChannelManagerAndServiceDefinitionsAfterCompilerPass()
     {
-        $this->assertTrue($this->container->hasParameter('adr_symfony2_erlang.configured.channels'));
-        $this->assertTrue($this->container->has('adr_symfony2erlang.channel.manager'));
+        $this->assertTrue(
+            $this->container->hasParameter('adr_symfony2_erlang.configured.channels')
+        );
+        $this->assertTrue(
+            $this->container->has('adr_symfony2erlang.channel.manager')
+        );
         $this->assertServices();
     }
 
     public function testChannelManagerLoads()
     {
         $channelManager = $this->container->get('adr_symfony2erlang.channel.manager');
-        $this->assertInstanceOf('ADR\Bundle\Symfony2ErlangBundle\Service\ChannelManager', $channelManager);
+        $this->assertInstanceOf(
+            'ADR\Bundle\Symfony2ErlangBundle\Service\ChannelManager', $channelManager
+        );
 
         $channels = $channelManager->getChannels();
         $this->assertInternalType('array', $channels);
@@ -66,8 +75,11 @@ class ADRSymfony2ErlangContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPebChannelFromChannelMannager($channelName, $channelType)
     {
-        $pebChannel = $this->container->get('adr_symfony2erlang.channel.manager')->getChannel($channelName);
-        $this->assertInstanceOf('ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\\'.$channelType, $pebChannel);
+        $pebChannel = $this->container->get('adr_symfony2erlang.channel.manager')
+                           ->getChannel($channelName);
+        $this->assertInstanceOf(
+            'ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\\'.$channelType, $pebChannel
+        );
 
         $this->assertEquals($channelName, $pebChannel->getChannelName());
 
@@ -83,7 +95,6 @@ class ADRSymfony2ErlangContainerTest extends \PHPUnit_Framework_TestCase
             array('socket_node0', 'Socket')
         );
     }
-
 
     protected function assertServices()
     {

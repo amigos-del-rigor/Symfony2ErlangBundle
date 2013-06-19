@@ -11,11 +11,12 @@ abstract class AbstractHandler
     public function handle(array $request)
     {
         $this->request = $request;
-        // call_user_func($this->getMethod());
-        // @TODO: check first if callable, then call_user....
-        $method = $this->getMethod();
 
-        return $this->$method();
+        if (!is_callable(array($this, $this->getMethod()))) {
+            throw new \Exception(sprintf("callable %s not found", $this->getMethod()));
+        }
+
+        return call_user_func(array($this, $this->getMethod()));
     }
 
     protected function getMethod()

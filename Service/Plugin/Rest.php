@@ -59,8 +59,11 @@ class Rest implements ChannelInterface
         $this->resource = $resource;
         $this->data = $data;
 
-        $method = $this->getMethod();
-        $response = $this->$method();
+        if (!is_callable(array($this, $this->getMethod()))) {
+            throw new \Exception(sprintf("callable %s not found", $this->getMethod()));
+        }
+
+        $response = call_user_func(array($this, $this->getMethod()));
 
         return $this->encoder->decode($response->getBody());
     }
@@ -119,6 +122,9 @@ class Rest implements ChannelInterface
 
     protected function getMethod()
     {
+        if (!isset($this->resource['method'])) {
+            throw new \Exception("Bad Method Resource Structure", 1);
+        }
         return strtolower($this->resource['method']);
     }
 

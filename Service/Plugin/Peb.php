@@ -60,6 +60,7 @@ class Peb implements ChannelInterface
     /**
      * Example call
      * ('ets', 'insert', array('test',array('key9', 'value3')));
+     * call('ets', 'insert', array("[~a, {~a, ~s}]", array('test', array('key9', 'value3'))));
      * @param string $moduleName
      * @param string $functionName
      * @param array $params
@@ -70,9 +71,15 @@ class Peb implements ChannelInterface
         if(!$this->link) {
             $this->openChannel();
         }
+
+        if (!isset($params[0])||!isset($params[1])) {
+            throw new \Exception("Bad format params", 1);
+
+        }
         $data = array(
             'functionName' => $functionName,
-            'params' => $params
+            'structure' => $params[0],
+            'params' => $params[1]
         );
 
         $message = $this->encoder->encode($data);

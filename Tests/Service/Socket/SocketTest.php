@@ -31,6 +31,7 @@ class SocketTest extends SocketServerProcess
         $this->socket->setHost($this->host);
         $this->socket->setPort($this->port);
     }
+
     /**
      * @large
      *
