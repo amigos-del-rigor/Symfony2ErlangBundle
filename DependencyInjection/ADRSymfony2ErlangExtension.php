@@ -20,10 +20,10 @@ class ADRSymfony2ErlangExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-
+        $loader = new Loader\XmlFileLoader(
+            $container, new FileLocator(__DIR__.'/../Resources/config')
+        );
         $loader->load('services.xml');
-
         $configuration = new Configuration();
 
         $config = $this->processConfiguration($configuration, $configs);
@@ -32,8 +32,7 @@ class ADRSymfony2ErlangExtension extends Extension
         //service alias processing
         if (!$container->hasParameter('adr_symfony2_erlang.services')) {
             $container->setParameter(
-                'adr_symfony2_erlang.services',
-                array(
+                'adr_symfony2_erlang.services',array(
                     'api.rest.handler' => 'adr_symfony2_erlang.api.rest.handler.noop'
                 )
             );
@@ -45,7 +44,10 @@ class ADRSymfony2ErlangExtension extends Extension
             try {
                 $container->findDefinition($serviceId);
             } catch(InvalidArgumentException $e) {
-                throw new LogicException(sprintf('The service (%s) specified for (%s) is not defined.', $serviceId, $id));
+                throw new LogicException(sprintf(
+                    'The service (%s) specified for (%s) is not defined.',
+                    $serviceId, $id)
+                );
             }
 
             $container->setAlias('adr_symfony2_erlang.' . $id, $serviceId);

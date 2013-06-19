@@ -26,14 +26,18 @@ class ADRSymfony2ErlangExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testContainerDefinitionArLoadExtension()
     {
-        $this->assertTrue($this->container->hasParameter('adr_symfony2_erlang.configured.channels'));
+        $this->assertTrue(
+            $this->container->hasParameter('adr_symfony2_erlang.configured.channels')
+        );
 
         $this->assertTrue($this->container->has('adr_symfony2_erlang.api.rest.handler'));
 
         $alias = $this->container->getAlias('adr_symfony2_erlang.api.rest.handler');
         $this->assertEquals(
             $this->container->getDefinition($alias)->getClass(),
-            $this->container->getDefinition('adr_symfony2_erlang.api.rest.handler.noop')->getClass()
+            $this->container
+                 ->getDefinition('adr_symfony2_erlang.api.rest.handler.noop')
+                 ->getClass()
         );
 
         $this->assertContains(
@@ -82,5 +86,6 @@ EOF;
     {
         parent::tearDown();
         $this->container = null;
+        $this->extension = null;
     }
 }

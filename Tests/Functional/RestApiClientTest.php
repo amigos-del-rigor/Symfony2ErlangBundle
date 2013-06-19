@@ -12,7 +12,9 @@ class RestApiClientTest extends AbstractWebTestCase
     public function setUp()
     {
         $this->client =  $this->createClient();
-        $this->restClient = $this->getContainer()->get('adr_symfony2erlang.channel.manager')->getChannel('rest_node0');
+        $this->restClient = $this->getContainer()
+                                 ->get('adr_symfony2erlang.channel.manager')
+                                 ->getChannel('rest_node0');
     }
 
     public function testFunctionalCOntainerServicesAreUp()
@@ -27,7 +29,6 @@ class RestApiClientTest extends AbstractWebTestCase
     public function testGetRestClient()
     {
         $response = $this->restClient->call($this->getResource('GET'));
-
         $this->assertResponse($response, 'GET');
     }
 
@@ -73,5 +74,11 @@ class RestApiClientTest extends AbstractWebTestCase
                 'name'      =>  'defaultName',
                 'key'       =>  1,
             );
+    }
+
+    public function tearDown()
+    {
+        $this->client = null;
+        $this->restClient = null;
     }
 }
