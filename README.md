@@ -15,7 +15,7 @@ Quick start
 
     configure your channels on parameters.yml
 
-    yo can define all channels that you need
+    you can define all channels that you need
     just remember to use the same type as service tag channel
 
     composer update
