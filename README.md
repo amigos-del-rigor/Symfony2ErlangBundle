@@ -6,8 +6,6 @@ Quick start
     Add Bundle on composer
         "adr/symfony2erlang-bundle":"dev-master"
 
-    cp app/config/parameters.yml.sample app/config/parameters.yml
-
     On config.yml:
 
         adr_symfony2_erlang:
