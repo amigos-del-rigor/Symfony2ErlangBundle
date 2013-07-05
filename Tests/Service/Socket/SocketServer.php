@@ -16,18 +16,18 @@ class SocketServer
     public function start()
     {
         // create socket
-        $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");
-        $result = socket_bind($socket, $this->host, $this->port) or die("Could not bind to socket\n");
-        $result = socket_listen($socket, 3) or die("Could not set up socket listener\n");
+        $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die('Could not create socket\n');
+        $result = socket_bind($socket, $this->host, $this->port) or die('Could not bind to socket\n');
+        $result = socket_listen($socket, 3) or die('Could not set up socket listener\n');
 
         // accept incoming connections and spawn another socket to handle communication
         while(true)
         {
-            $spawn = socket_accept($socket) or die("Could not accept incoming connection\n");
+            $spawn = socket_accept($socket) or die('Could not accept incoming connection\n');
 
             while(true) {
-                $input = socket_read($spawn, 2048) or die("Could not read input\n");
-                socket_write($spawn, $input, strlen ($input)) or die("Could not write output\n");
+                $input = socket_read($spawn, 2048) or die('Could not read input\n');
+                socket_write($spawn, $input, strlen ($input)) or die('Could not write output\n');
             }
 
             socket_close($spawn);

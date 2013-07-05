@@ -3,11 +3,9 @@
 namespace ADR\Bundle\Symfony2ErlangBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
@@ -21,7 +19,7 @@ class ADRSymfony2ErlangExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new Loader\XmlFileLoader(
-            $container, new FileLocator(__DIR__.'/../Resources/config')
+            $container, new FileLocator(__DIR__ . '/../Resources/config')
         );
         $loader->load('services.xml');
         $configuration = new Configuration();
@@ -29,10 +27,11 @@ class ADRSymfony2ErlangExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $container->setParameter('adr_symfony2_erlang.configured.channels', $config);
 
-        //service alias processing
+        // Service alias processing
         if (!$container->hasParameter('adr_symfony2_erlang.services')) {
             $container->setParameter(
-                'adr_symfony2_erlang.services',array(
+                'adr_symfony2_erlang.services',
+                array(
                     'api.rest.handler' => 'adr_symfony2_erlang.api.rest.handler.noop'
                 )
             );
@@ -43,10 +42,13 @@ class ADRSymfony2ErlangExtension extends Extension
         foreach ($config as $id => $serviceId) {
             try {
                 $container->findDefinition($serviceId);
-            } catch(InvalidArgumentException $e) {
-                throw new LogicException(sprintf(
-                    'The service (%s) specified for (%s) is not defined.',
-                    $serviceId, $id)
+            } catch (InvalidArgumentException $e) {
+                throw new LogicException(
+                    sprintf(
+                        'The service (%s) specified for (%s) is not defined.',
+                        $serviceId,
+                        $id
+                    )
                 );
             }
 

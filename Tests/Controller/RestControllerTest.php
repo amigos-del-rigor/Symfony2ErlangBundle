@@ -49,12 +49,12 @@ class RestControllerTest extends \PHPUnit_Framework_TestCase
         $decodeResponse = json_decode($content, true);
 
         $this->assertInternalType('array', $decodeResponse);
-        $this->assertArrayHasKey("method", $decodeResponse);
-        $this->assertArrayHasKey("version", $decodeResponse);
-        $this->assertArrayHasKey("type", $decodeResponse);
-        $this->assertArrayHasKey("name", $decodeResponse);
-        $this->assertArrayHasKey("key", $decodeResponse);
-        $this->assertArrayHasKey("test_data", $decodeResponse);
+        $this->assertArrayHasKey('method', $decodeResponse);
+        $this->assertArrayHasKey('version', $decodeResponse);
+        $this->assertArrayHasKey('type', $decodeResponse);
+        $this->assertArrayHasKey('name', $decodeResponse);
+        $this->assertArrayHasKey('key', $decodeResponse);
+        $this->assertArrayHasKey('test_data', $decodeResponse);
         $this->assertEquals($decodeResponse['version'], 'v1');
         $this->assertEquals($decodeResponse['method'], 'GET');
         $this->assertEquals($decodeResponse['type'], 'defaultType');
@@ -94,14 +94,13 @@ class RestControllerTest extends \PHPUnit_Framework_TestCase
     protected function getFakeRequestData()
     {
         return array(
-                'method'    =>  'GET',
-                'version'   =>  'v1',
-                'type'      =>  'defaultType',
-                'name'      =>  'defaultName',
-                'key'       =>  1,
-                'status_code' => 200,
-                'test_data'  =>  'fakeOK'
+                'method'        => 'GET',
+                'version'       => 'v1',
+                'type'          => 'defaultType',
+                'name'          => 'defaultName',
+                'key'           => 1,
+                'status_code'   => 200,
+                'test_data'     => 'fakeOK'
             );
     }
-
 }

@@ -9,6 +9,7 @@ class Socket implements ChannelInterface
 {
     /**
      * Channel Name Definition
+     *
      * @var string
      */
     protected $channelName;
@@ -20,12 +21,14 @@ class Socket implements ChannelInterface
 
     /**
      * Host Url
+     *
      * @var string
      */
     protected $host;
 
     /**
      * Destination Port
+     *
      * @var integer
      */
     protected $port;
@@ -50,15 +53,15 @@ class Socket implements ChannelInterface
      * Implemented by default to pass Json encode data as a field on
      * post request
      *
-     * @param string $resource
-     * @param string $data
+     * @param string|array $resource
+     * @param array $data
      * @param array $params
      *
      * @return array
      */
     public function call($resource, $data = array(), $params = array()) {
 
-        if(!$this->socket) {
+        if (!$this->socket) {
             $this->openChannel();
         }
 
@@ -70,14 +73,12 @@ class Socket implements ChannelInterface
         $status = socket_sendto($this->socket, $input, strlen($input), MSG_EOF, $this->host, $this->port);
 
         $output = '';
-        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, array("sec"=>0, "usec"=>50));
-        while ($status = socket_read($this->socket, $this->bufferLenght))
-        {
+        socket_set_option($this->socket, SOL_SOCKET, SO_RCVTIMEO, array('sec' => 0, 'usec' => 50));
+        while ($status = socket_read($this->socket, $this->bufferLenght)) {
             $output .= $status;
         }
 
         return $this->encoder->decode($output);
-
     }
 
     /**
@@ -92,8 +93,9 @@ class Socket implements ChannelInterface
         try {
             $this->connect();
         } catch (\Exception $e) {
-            //fix to avoid connection_refused at first try
+            // fix to avoid connection_refused at first try
             sleep(1);
+
             if (!$this->connect()) {
                 throw new \Exception(
                     sprintf('Connection  %s failure, on Socket Server Node: %s:%s. Failed Reason: %s',
