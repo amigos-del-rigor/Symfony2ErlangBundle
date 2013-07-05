@@ -9,10 +9,10 @@ use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\ChannelInterface;
  */
 Class Ets
 {
-    const insert            = "[~a, {~a, ~s}]";
-    const lookup            = "[~a, ~a]";
-    const delete            = "[~a, ~a]";
-    const info              = "[~a]";
+    const insert    = '[~a, {~a, ~s}]';
+    const lookup    = '[~a, ~a]';
+    const delete    = '[~a, ~a]';
+    const info      = '[~a]';
 
     protected $channel;
 
@@ -32,7 +32,7 @@ Class Ets
     {
         //'ets', 'insert', array(self::insert, array($etsTable,array($key, $value)))
         return $this->channel->call(
-            'ets', 'insert', array(self::insert, array($etsTable,array($key, $value)))
+            'ets', 'insert', array(self::insert, array($etsTable, array($key, $value)))
         );
     }
 }

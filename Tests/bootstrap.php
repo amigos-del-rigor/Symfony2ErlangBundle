@@ -6,7 +6,7 @@ function includeIfExists($file)
         return include $file;
     }
 
-    throw new \Exception(sprintf("File %s not found", $file), 1);
+    throw new \Exception(sprintf('File %s not found', $file), 1);
 
 }
 

@@ -5,11 +5,13 @@ use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\ChannelInterface;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\EncoderInterface;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Channel\AMQPChannel;
 
 class RpcAmqp implements ChannelInterface
 {
     /**
      * Channel Name Definition
+     *
      * @var string
      */
     protected $channelName;
@@ -21,48 +23,55 @@ class RpcAmqp implements ChannelInterface
 
     /**
      * Host Url
+     *
      * @var string
      */
     protected $host;
 
     /**
      * Destination Port
+     *
      * @var integer
      */
     protected $port;
 
     /**
      * User Name
+     *
      * @var string
      */
     protected $user;
 
     /**
      * Auth Password
+     *
      * @var string
      */
     protected $password;
 
     /**
      * Connection Link
+     *
      * @var AMQPConnection
      */
     protected $link;
 
     /**
-     * AMQChannel
-     * @var
+     * AMQPChannel
+     *
+     * @var AMQPChannel
      */
     protected $amqpChannel;
 
     /**
      * AMQ CallBack Queue
+     *
      * @var
      */
     protected $callbackQueue;
 
     /**
-     * @var [type]
+     * @var
      */
     protected $response;
 
@@ -78,6 +87,7 @@ class RpcAmqp implements ChannelInterface
 
     /**
      * Handle Call
+     *
      * @param string $moduleName
      * @param string $functionName
      * @param array $params
@@ -85,7 +95,7 @@ class RpcAmqp implements ChannelInterface
      * @return array
      */
     public function call($moduleName, $functionName, $params) {
-        if(!$this->link) {
+        if (!$this->link) {
             $this->openChannel();
         }
 
@@ -99,22 +109,24 @@ class RpcAmqp implements ChannelInterface
             array('correlation_id' => $this->corrId,
                   'reply_to'       => $this->callbackQueue)
         );
+
         $this->amqpChannel->basic_publish($msg, '', $moduleName . ':' . $functionName);
-        while(!$this->response) {
+
+        while (!$this->response) {
             $this->amqpChannel->wait();
         }
+
         return $this->encoder->decode($this->response);
     }
 
     protected function openChannel()
     {
-
         $this->link = new AMQPConnection(
             $this->host, $this->port, $this->user, $this->password
         );
 
         $this->amqpChannel = $this->link->channel();
-        list($this->callbackQueue, ,) = $this->amqpChannel->queue_declare("", false, false, true, false);
+        list($this->callbackQueue, ,) = $this->amqpChannel->queue_declare('', false, false, true, false);
         $this->amqpChannel->basic_consume(
             $this->callbackQueue, '', false, false, false, false,
             array($this, 'on_response')
@@ -123,7 +135,7 @@ class RpcAmqp implements ChannelInterface
 
     public function on_response($rep)
     {
-        if($rep->get('correlation_id') == $this->corrId) {
+        if ($rep->get('correlation_id') == $this->corrId) {
             $this->response = $rep->body;
         }
     }

@@ -45,7 +45,7 @@ class RestController
      *
      * @return Response
      */
-    public function indexAction($apiVersion = 'v1', $type = 'default', $name = 'default', $key=1)
+    public function indexAction($apiVersion = 'v1', $type = 'default', $name = 'default', $key = 1)
     {
         $request = array(
                 'method'    =>  $this->request->getMethod(),
@@ -71,7 +71,7 @@ class RestController
         $statusCode = $response['status_code'];
         unset($response['status_code']);
 
-        //only used on test environment
+        // only used on test environment
         if (isset($response['test_data']) && PHP_SAPI !== 'cli') {
             unset($response['test_data']);
         }

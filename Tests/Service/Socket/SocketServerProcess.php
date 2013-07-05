@@ -21,7 +21,7 @@ abstract class SocketServerProcess extends \PHPUnit_Framework_TestCase
         }
 
         $command = sprintf(
-            "php Tests/Service/Socket/SocketServer.php %s %s", $host, $port
+            'php Tests/Service/Socket/SocketServer.php %s %s', $host, $port
         );
 
         $this->process = new Process($command);

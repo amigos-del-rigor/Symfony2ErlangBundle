@@ -5,37 +5,37 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Service\Encoder;
 Class PebEncoder implements EncoderInterface
 {
     /**
-     * [encode description]
-     * @param  array  $data data[0] keys, data[1] params
-     * @param  string $type [description]
-     * @return [type]       [description]
+     * @param array  $data
+     * @param string $type
+     *
+     * @return mixed
      */
     public function encode(array $data, $type = 'encode')
     {
         if (!isset($data['functionName']) || !isset($data['params']) || !isset($data['structure'])) {
-            throw new \Exception("Bad formated data Structure");
+            throw new \Exception('Bad formatted data Structure');
         }
 
         return $this->rawEncode(array($data['structure'], $data['params']), $type);
     }
 
     /**
-     * Encode from builded parameters
+     * Encode from built parameters
      *
-     * @param  array  $data [0]=>[***]", [1]=> $params
+     * @param array  $data [0]=>[***]', [1]=> $params
      * @param string $type variant
      *
-     * @return Erlang Term
+     * @return mixed
      */
     protected function rawEncode(array $data, $type)
     {
         if (!isset($data[0]) || !isset($data[1])){
-            throw new \Exception("Bad formated argument and parameters");
+            throw new \Exception('Bad formatted argument and parameters');
         }
 
-        $values = is_array($data[1])? $data[1]: array($data[1]);
+        $values = is_array($data[1]) ? $data[1] : array($data[1]);
 
-        if($type == 'vencode') {
+        if ('vencode' === $type) {
             return peb_vencode($data[0], array($values));
         }
 
@@ -45,17 +45,17 @@ Class PebEncoder implements EncoderInterface
     /**
      * Decode
      *
-     * @param  Erlang Term $data resource(64)
-     * @param  string $type Vencode version available
+     * @param mixed $data resource(64)
+     * @param string $type Vencode version available
      *
      * @return array
      */
     public function decode($data, $type = 'encode')
     {
-        $result = ($type == 'vencode')? peb_vdecode($data): peb_decode($data);
+        $result = ('vencode' === $type) ? peb_vdecode($data) : peb_decode($data);
 
         if (!isset($result[0])){
-            throw new \Exception("Bad Decoded Structure");
+            throw new \Exception('Bad Decoded Structure');
         }
 
         return $result[0];

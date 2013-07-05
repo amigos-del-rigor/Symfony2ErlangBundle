@@ -4,23 +4,27 @@ namespace ADR\Bundle\Symfony2ErlangBundle\Service\Plugin;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Plugin\ChannelInterface;
 use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\EncoderInterface;
 use Guzzle\Http\Client;
+use Guzzle\Http\Message\Response;
 
 class Rest implements ChannelInterface
 {
     /**
      * Channel Name Definition
+     *
      * @var string
      */
     protected $channelName;
 
     /**
      * Host Url
+     *
      * @var string
      */
     protected $host;
 
     /**
      * Destination Port
+     *
      * @var integer
      */
     protected $port;
@@ -32,12 +36,18 @@ class Rest implements ChannelInterface
 
     /**
      * Destination Resource
-     * @var [type]
+     *
+     * @var string
      */
     protected $resource;
 
     /**
-     * @param EncoderInterface $encoder [description]
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * @param EncoderInterface $encoder
      */
     public function __construct(EncoderInterface $encoder)
     {
@@ -49,7 +59,7 @@ class Rest implements ChannelInterface
      * post request
      *
      * @param string $resource
-     * @param string $data
+     * @param array $data
      * @param array $params
      *
      * @return array
@@ -60,7 +70,7 @@ class Rest implements ChannelInterface
         $this->data = $data;
 
         if (!is_callable(array($this, $this->getMethod()))) {
-            throw new \Exception(sprintf("callable %s not found", $this->getMethod()));
+            throw new \Exception(sprintf('callable %s not found', $this->getMethod()));
         }
 
         $response = call_user_func(array($this, $this->getMethod()));
@@ -123,16 +133,16 @@ class Rest implements ChannelInterface
     protected function getMethod()
     {
         if (!isset($this->resource['method'])) {
-            throw new \Exception("Bad Method Resource Structure", 1);
+            throw new \Exception('Bad Method Resource Structure', 1);
         }
         return strtolower($this->resource['method']);
     }
 
     protected function getRequestPath()
     {
-        return $this->resource['version'].'/'.
-                $this->resource['type'].'/'.
-                $this->resource['name'].'/'.
+        return $this->resource['version'] . '/' .
+                $this->resource['type'] . '/' .
+                $this->resource['name'] . '/' .
                 $this->resource['key'];
     }
 

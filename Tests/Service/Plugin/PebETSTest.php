@@ -8,10 +8,10 @@ use Symfony\Component\Process\Process;
 
 class PebETSTest extends \PHPUnit_Framework_TestCase
 {
-    const insert            = "[~a, {~a, ~s}]";
-    const lookup            = "[~a, ~a]";
-    const delete            = "[~a, ~a]";
-    const info              = "[~a]";
+    const insert            = '[~a, {~a, ~s}]';
+    const lookup            = '[~a, ~a]';
+    const delete            = '[~a, ~a]';
+    const info              = '[~a]';
 
     protected $peb;
     protected $process;
