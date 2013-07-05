@@ -9,11 +9,9 @@ namespace ADR\Bundle\Symfony2ErlangBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 class PluginsCompilerPass implements CompilerPassInterface
 {
-
     /**
      * Define Channel Configuration
      *
@@ -23,7 +21,7 @@ class PluginsCompilerPass implements CompilerPassInterface
     {
         $configuredChannels = $container->getParameter(
             'adr_symfony2_erlang.configured.channels'
-            );
+        );
 
         $this->defineChannelsConfiguration($container, $configuredChannels);
     }
@@ -40,7 +38,7 @@ class PluginsCompilerPass implements CompilerPassInterface
         $definition = new Definition('ADR\Bundle\Symfony2ErlangBundle\Service\ChannelManager');
 
         if (!isset($config['channels'])) {
-            throw new \Exception("Configure adr_symfony2_erlang channel on config.yml", 1);
+            throw new \Exception('Configure adr_symfony2_erlang channel on config.yml', 1);
         }
 
         foreach ($config['channels'] as $name => $parameters) {
@@ -63,7 +61,7 @@ class PluginsCompilerPass implements CompilerPassInterface
     /**
      * Process Plugin Ids by type for better access
      *
-     * @param Container $container
+     * @param ContainerBuilder $container
      */
     protected function processTagedPlugins(ContainerBuilder $container)
     {
@@ -97,6 +95,6 @@ class PluginsCompilerPass implements CompilerPassInterface
      */
     protected function getSetterMethod($key)
     {
-        return 'set'.ucfirst($key);
+        return 'set' . ucfirst($key);
     }
 }

@@ -18,8 +18,8 @@ class NoopRestHandlerTest extends \PHPUnit_Framework_TestCase
         $m->setAccessible(true);
 
         $response = $m->invoke($this->handler, 'test');
-        $this->assertArrayHasKey("status_code", $response);
-        $this->assertArrayHasKey("test_data", $response);
+        $this->assertArrayHasKey('status_code', $response);
+        $this->assertArrayHasKey('test_data', $response);
         $this->assertEquals($response['status_code'], 200);
         $this->assertEquals($response['test_data'], 'test-ok');
     }

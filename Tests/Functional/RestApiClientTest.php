@@ -53,11 +53,11 @@ class RestApiClientTest extends AbstractWebTestCase
     protected function assertResponse($response, $method)
     {
         $this->assertInternalType('array', $response);
-        $this->assertArrayHasKey("method", $response);
-        $this->assertArrayHasKey("version", $response);
-        $this->assertArrayHasKey("type", $response);
-        $this->assertArrayHasKey("name", $response);
-        $this->assertArrayHasKey("key", $response);
+        $this->assertArrayHasKey('method', $response);
+        $this->assertArrayHasKey('version', $response);
+        $this->assertArrayHasKey('type', $response);
+        $this->assertArrayHasKey('name', $response);
+        $this->assertArrayHasKey('key', $response);
         $this->assertEquals($response['version'], 'v1');
         $this->assertEquals($response['method'], $method);
         $this->assertEquals($response['type'], 'defaultType');

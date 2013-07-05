@@ -2,8 +2,6 @@
 
 namespace ADR\Bundle\Symfony2ErlangBundle\Service\Rest;
 
-use ADR\Bundle\Symfony2ErlangBundle\Service\Rest\RestHandlerInterface;
-
 abstract class AbstractHandler
 {
     protected $request = array();
@@ -13,7 +11,7 @@ abstract class AbstractHandler
         $this->request = $request;
 
         if (!is_callable(array($this, $this->getMethod()))) {
-            throw new \Exception(sprintf("callable %s not found", $this->getMethod()));
+            throw new \Exception(sprintf('callable %s not found', $this->getMethod()));
         }
 
         return call_user_func(array($this, $this->getMethod()));

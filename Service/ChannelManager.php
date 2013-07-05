@@ -11,13 +11,16 @@ Class ChannelManager
 {
     /**
      * Array Configured Channels
+     *
      * @var array
      */
     protected $channels = array();
 
     /**
      * Add Channel to ChannelManager Pool
+     *
      * @param ChannelInterface $channel
+     * @param int $id plugin id
      */
     public function addChannel(ChannelInterface $channel, $id = null)
     {
@@ -26,7 +29,9 @@ Class ChannelManager
 
     /**
      * Get Channel from Pool
+     *
      * @param string $name Channel Name
+     *
      * @return ChannelInterface
      */
     public function getChannel($name)
@@ -40,7 +45,8 @@ Class ChannelManager
 
     /**
      * @param ChannelInterface $channel
-     * @param  int $id      plugin $id
+     * @param  int $id plugin id
+     *
      * @return string
      */
     protected function getChannelName(ChannelInterface $channel, $id = null)

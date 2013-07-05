@@ -87,7 +87,7 @@ class SocketTest extends AbstractWebTestCase
         }
 
         $command = sprintf(
-            "php Tests/Service/Socket/SocketServer.php %s %s",
+            'php Tests/Service/Socket/SocketServer.php %s %s',
             $this->host,
             $this->port
         );

@@ -15,7 +15,7 @@ class PebEncoderTest extends \PHPUnit_Framework_TestCase
         $m = $r->getMethod('rawEncode');
         $m->setAccessible(true);
 
-        $data = array("[~s]" , 'message');
+        $data = array('[~s]' , 'message');
         $encodeData = $m->invoke($encoder, $data, 'vencode');
         $decodedData = $encoder->decode($encodeData, 'vencode');
 
@@ -29,7 +29,7 @@ class PebEncoderTest extends \PHPUnit_Framework_TestCase
         $r = new \ReflectionObject($encoder);
         $m = $r->getMethod('rawEncode');
         $m->setAccessible(true);
-        $data = array("[~s]" , 'message');
+        $data = array('[~s]' , 'message');
         $encodeData = $m->invoke($encoder, $data, 'encode');
 
         $decodedData = $encoder->decode($encodeData);
@@ -70,7 +70,7 @@ class PebEncoderTest extends \PHPUnit_Framework_TestCase
     public function testRawEncodeAndDecodeMultiData()
     {
         $params = array('test', 'message');
-        $data = array("[~a,~a]", $params);
+        $data = array('[~a,~a]', $params);
         $encoder = new PebEncoder();
         $r = new \ReflectionObject($encoder);
         $m = $r->getMethod('rawEncode');
@@ -91,8 +91,8 @@ class PebEncoderTest extends \PHPUnit_Framework_TestCase
     public function testEncodeAndDecodeMultiData()
     {
         $encoder = new PebEncoder();
-        $params = array("[~a,~a]",array('test', 'message'));
-        $data = array("[~a,~a]", $params);
+        $params = array('[~a,~a]',array('test', 'message'));
+        $data = array('[~a,~a]', $params);
 
         $data = array(
             'functionName' => 'lookup',

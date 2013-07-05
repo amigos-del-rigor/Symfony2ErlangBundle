@@ -41,13 +41,13 @@ class SocketTest extends SocketServerProcess
     public function testOnOpenChannelOverServer()
     {
         $response =$this->socket->call('test', array());
-        $this->assertContains("test", $response);
+        $this->assertContains('test', $response);
 
         $response =$this->socket->call('nextMessage', array());
-        $this->assertContains("nextMessage", $response);
+        $this->assertContains('nextMessage', $response);
 
         $response =$this->socket->call('packet3', array());
-        $this->assertContains("packet3", $response);
+        $this->assertContains('packet3', $response);
     }
 
     public function tearDown()
