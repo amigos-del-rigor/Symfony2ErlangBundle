@@ -48,7 +48,7 @@ class PebEncoderTest extends \PHPUnit_Framework_TestCase
     /**
      *
      * @expectedException Exception
-     * @expectedExceptionMessage Bad formated argument and parameters
+     * @expectedExceptionMessage Bad formatted argument and parameters
      */
     public function testFailRawEncodeBadParameters()
     {
@@ -62,7 +62,7 @@ class PebEncoderTest extends \PHPUnit_Framework_TestCase
     /**
      *
      * @expectedException Exception
-     * @expectedExceptionMessage Bad formated data Structure
+     * @expectedExceptionMessage Bad formatted data Structure
      */
     public function testFailEncodeBadParameters()
     {
