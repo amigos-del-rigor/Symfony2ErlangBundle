@@ -16,16 +16,18 @@
         }
     ],
     "require": {
-        "php"                      : ">=5.3.0",
-        "videlalvaro/php-amqplib"  : "v1.1"
+        "php": ">=5.3.0",
+        "videlalvaro/php-amqplib": "v1.1"
     },
-    "require-dev":{
-        "symfony/symfony": "2.2.*",
-        "mockery/mockery":"dev-master#1a1a222",
+    "require-dev": {
+        "symfony/symfony": ">2.2.0, <2.4-dev",
+        "mockery/mockery": "dev-master",
         "guzzle/guzzle": "3.4.*@dev"
     },
-     "autoload": {
-        "psr-0": { "ADR\\Bundle\\Symfony2ErlangBundle": "" }
+    "autoload": {
+        "psr-0": {
+            "ADR\\Bundle\\Symfony2ErlangBundle": ""
+        }
     },
     "minimum-stability": "dev",
     "target-dir": "ADR/Bundle/Symfony2ErlangBundle"

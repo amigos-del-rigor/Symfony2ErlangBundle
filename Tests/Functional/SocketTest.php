@@ -24,6 +24,10 @@ class SocketTest extends AbstractWebTestCase
 
     public function setUp()
     {
+        if (!extension_loaded('sockets')) {
+            $this->markTestSkipped('You need the php socket library to run these tests');
+        }
+
         parent::setUp();
         $this->startServer();
         sleep(1);
