@@ -66,12 +66,12 @@ class RpcAmqp implements ChannelInterface
     /**
      * AMQ CallBack Queue
      *
-     * @var
+     * @var string
      */
     protected $callbackQueue;
 
     /**
-     * @var
+     * @var AMQPMessage
      */
     protected $response;
 
@@ -94,7 +94,8 @@ class RpcAmqp implements ChannelInterface
      *
      * @return array
      */
-    public function call($moduleName, $functionName, $params) {
+    public function call($moduleName, $functionName, $params)
+    {
         if (!$this->link) {
             $this->openChannel();
         }
@@ -105,9 +106,11 @@ class RpcAmqp implements ChannelInterface
         $encodedParams = $this->encoder->encode($params);
 
         $msg = new AMQPMessage(
-            (string) $encodedParams,
-            array('correlation_id' => $this->corrId,
-                  'reply_to'       => $this->callbackQueue)
+            (string)$encodedParams,
+            array(
+                'correlation_id' => $this->corrId,
+                'reply_to' => $this->callbackQueue
+            )
         );
 
         $this->amqpChannel->basic_publish($msg, '', $moduleName . ':' . $functionName);
@@ -128,12 +131,17 @@ class RpcAmqp implements ChannelInterface
         $this->amqpChannel = $this->link->channel();
         list($this->callbackQueue, ,) = $this->amqpChannel->queue_declare('', false, false, true, false);
         $this->amqpChannel->basic_consume(
-            $this->callbackQueue, '', false, false, false, false,
+            $this->callbackQueue,
+            '',
+            false,
+            false,
+            false,
+            false,
             array($this, 'on_response')
         );
     }
 
-    public function on_response($rep)
+    public function on_response(AMQPMessage $rep)
     {
         if ($rep->get('correlation_id') == $this->corrId) {
             $this->response = $rep->body;
