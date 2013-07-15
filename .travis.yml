@@ -9,6 +9,12 @@ services:
   - rabbitmq
 
 before_script:
+  # install erlang
+  - cd /tmp
+  - wget http://erlang.org/download/otp_src_R15B01.tar.gz
+  - tar zxvf otp_src_R15B01.tar.gz
+  - cd otp_src_R15B01
+  - sh -c "./configure && make && make install"
   # Clone and install Alvaro's library
   - git clone https://github.com/videlalvaro/mypeb.git /tmp/mypeb
   - sh -c "cd /tmp/mypeb && phpize && ./configure && make && make install"
