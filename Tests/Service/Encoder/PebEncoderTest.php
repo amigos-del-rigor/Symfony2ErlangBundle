@@ -7,6 +7,13 @@ use ADR\Bundle\Symfony2ErlangBundle\Service\Encoder\PebFormatter;
 
 class PebEncoderTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        if (!extension_loaded('peb')) {
+            $this->markTestSkipped('You need the PHP Erlang Bridge extension to run these tests');
+        }
+    }
+
     public function testVEncodeAndDecodeArray()
     {
         $encoder = new PebEncoder();

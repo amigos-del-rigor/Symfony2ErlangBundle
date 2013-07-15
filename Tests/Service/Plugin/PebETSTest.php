@@ -23,6 +23,10 @@ class PebETSTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        if (!extension_loaded('peb')) {
+            $this->markTestSkipped('You need the PHP Erlang Bridge extension to run these tests');
+        }
+
         $encoder = new PebEncoder();
         $this->peb = new Peb($encoder);
         $this->peb->setNode('node0@127.0.0.1');

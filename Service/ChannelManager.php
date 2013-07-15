@@ -20,9 +20,8 @@ Class ChannelManager
      * Add Channel to ChannelManager Pool
      *
      * @param ChannelInterface $channel
-     * @param int $id plugin id
      */
-    public function addChannel(ChannelInterface $channel, $id = null)
+    public function addChannel(ChannelInterface $channel)
     {
         $this->channels[$channel->getChannelName()] = $channel;
     }
