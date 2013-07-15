@@ -23,6 +23,10 @@ class SocketTest extends SocketServerProcess
 
     public function setUp()
     {
+        if (!extension_loaded('sockets')) {
+            $this->markTestSkipped('You need the php socket library to run these tests');
+        }
+
         $this->startServer($this->host, $this->port);
 
         $encoder = new NoopEncoder();

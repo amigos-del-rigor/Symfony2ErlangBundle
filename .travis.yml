@@ -1,0 +1,15 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+
+services:
+  - rabbitmq
+
+before_script:
+  # Clone and install Alvaro's library
+  - git clone https://github.com/videlalvaro/mypeb.git /tmp/mypeb
+  - sh -c "cd /tmp/mypeb && phpize && ./configure && make && make install"
+  - echo "extension=peb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
