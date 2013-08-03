@@ -93,7 +93,8 @@ class Socket implements ChannelInterface
         try {
             $this->connect();
         } catch (\Exception $e) {
-
+            // fix to avoid connection_refused at first try
+            sleep(1);
 
             if (!$this->connect()) {
                 throw new \Exception(
