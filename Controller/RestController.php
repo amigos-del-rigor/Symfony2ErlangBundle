@@ -79,14 +79,4 @@ class RestController
             array('Content-Type', 'application/json')
         );
     }
-
-    /**
-     * Used only Test Environment
-     *
-     * @param RestHandlerInterface $restHandler
-     */
-    public function setRestHandler(RestHandlerInterface $restHandler)
-    {
-        $this->restHandler = $restHandler;
-    }
 }

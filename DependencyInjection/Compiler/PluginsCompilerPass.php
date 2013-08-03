@@ -45,7 +45,6 @@ class PluginsCompilerPass implements CompilerPassInterface
 
             $pluginId = $this->getPlugin($parameters['type']);
 
-            //@TODO: As new Reference ID
             $channelDefinition = clone $container->getDefinition($pluginId);
             $channelDefinition->addMethodCall('setChannelName', array($name));
 
