@@ -64,7 +64,7 @@ class SocketTest extends AbstractWebTestCase
             $message = sprintf('sending message %s', $i);
             $data = array('data' => $message);
             $parameters = array('parameters' => $i);
-            $response =$this->socketClient->call($resource, $data, $parameters);
+            $response = $this->socketClient->call($resource, $data, $parameters);
 
             $this->assertInternalType('array', $response);
             $this->assertArrayHasKey('module', $response);
